@@ -2,6 +2,7 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,12 +47,6 @@ public class SourceFilter extends FilterFramework {
     int bytesWritten = 0; // Number of bytes written to the stream.
     byte[] l_arr = new byte[8];
     byte[] s_arr = new byte[4];
-    
-    class frame {
-    	public byte[] date = new byte[8];
-    	public byte[] id = new byte[4];
-    	public byte[] data = new byte[8];
-    }
 	
 	public SourceFilter(String _fileName)
 	{
@@ -68,10 +63,9 @@ public class SourceFilter extends FilterFramework {
         try {
             in = new DataInputStream(new FileInputStream(fileName));
             System.out.println("\n" + this.getName() + "::Source reading file...");
+            HashMap<Integer, Double> frame = new HashMap<Integer, Double>();            
+            in.read(s_arr);
             
-            dataByte = in.readByte();
-            ArrayList<Byte> frame = new ArrayList<Byte>();
-            frame.add(dataByte);
             while (true) {
                 /***********************************************************************************
                  * Here we open the file and write a message to the terminal.
@@ -79,12 +73,12 @@ public class SourceFilter extends FilterFramework {
             	//DateFormat dateFormat = new SimpleDateFormat("yyyy/dd HH:mm:ss");
                 //Date date = new Date();
                 //dateFormat.format(date);
-            	dataByte = in.readByte();
-            	frame.add(dataByte);
+            	in.read(l_arr);
+            	frame.put(ByteBuffer.wrap(s_arr).getInt(), ByteBuffer.wrap(s_arr).getDouble());
             	bytesRead++;
                 if (dataByte == 0)
                 {
-                	writeFilterOutputPort(frame);
+                	//writeFilterOutputPort(frame);
                 	frame.clear();
                 }               
                 bytesWritten++;
