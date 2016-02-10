@@ -1,12 +1,8 @@
+/FilterCleaner.class
 /FilterFramework$EndOfStreamException.class
 /FilterFramework.class
-/FilterTemplate.class
-/PlumberTemplate.class
-/SinkFilterTemplate.class
-/SourceFilterTemplate.class
-/SinkFilter.class
-/SourceFilter.class
-/FilterCleaner.class
 /Frame.class
 /Plumber.class
+/SinkFilter.class
 /SourceFilter$frame.class
+/SourceFilter.class
