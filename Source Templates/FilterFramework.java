@@ -174,9 +174,9 @@ public class FilterFramework extends Thread {
      *
      ****************************************************************************/
 
-    void writeFilterOutputPort(byte datum) {
+    void writeFilterOutputPort(byte[] datum) {
         try {
-            outputWritePort.write((int) datum);
+            outputWritePort.write(datum);
             outputWritePort.flush();
         } catch (Exception e) {
             System.out.println("\n" + this.getName() + " Pipe write error::" + e);

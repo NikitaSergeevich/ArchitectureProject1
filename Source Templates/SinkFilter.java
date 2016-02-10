@@ -26,7 +26,7 @@
  *
  ******************************************************************************************************************/
 
-public class SinkFilterTemplate extends FilterFramework {
+public class SinkFilter extends FilterFramework {
 
     public void run() {
         byte dataByte = 0;

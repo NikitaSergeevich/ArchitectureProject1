@@ -37,7 +37,7 @@
  * Internal Methods: None
  *
  ******************************************************************************************************************/
-public class PlumberTemplate {
+public class Plumber {
 
     public static void main(String argv[]) {
 
