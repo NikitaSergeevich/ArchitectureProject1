@@ -46,6 +46,7 @@ public class FilterCleaner extends FilterFramework {
                  * Here we could insert code to operate on the input stream... Then we write a byte
                  * out to the output port.
                  ***************************************************************/
+                
 
                 writeFilterOutputPort(dataByte);
 
