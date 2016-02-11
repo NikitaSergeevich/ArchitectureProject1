@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.HashMap;
+
 /******************************************************************************************************************
  * File: FilterTemplate.java
  * Course: MSIT-SE-M-04
@@ -26,9 +30,15 @@
  ******************************************************************************************************************/
 
 public class FilterCleaner extends FilterFramework {
+	
+	int[] id_filter = null;
+	
+	public FilterCleaner(int[] ids){
+		id_filter = ids;
+	}
 
     public void run() {
-        byte[] dataByte;
+        byte[] dataBytes;
 
         while (true) {
 
@@ -40,15 +50,35 @@ public class FilterCleaner extends FilterFramework {
              ***************************************************************/
 
             try {
-                dataByte = readNextFilterInputPort();
+                dataBytes = readNextFilterInputPort();
 
                 /***************************************************************
                  * Here we could insert code to operate on the input stream... Then we write a byte
                  * out to the output port.
                  ***************************************************************/
                 
-
-                writeNextFilterOutputPort(dataByte);
+            	HashMap<Integer, Double> m = null;
+            	Object o = deserialize(dataBytes);
+            	
+            	if (o instanceof HashMap<?, ?>)
+            	{
+            		m = (HashMap<Integer, Double>)o;
+            	}
+              	for (int i:id_filter)
+            	{
+            		if (m.get(i) != null)
+            		{
+            			m.remove(i);
+            		}
+            	}
+              	
+            	byte[] data_buf = serialize((Object)m);
+            	int data_size = data_buf.length;
+            	byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();
+            	byte[] frame_buf = new byte[4 + data_size];            	
+            	System.arraycopy(size_buf, 0, frame_buf, 0, 4);
+            	System.arraycopy(data_buf, 0, frame_buf, 4, data_buf.length);
+                writeNextFilterOutputPort(dataBytes);
 
             } catch (EndOfStreamException e) {
 
@@ -60,6 +90,13 @@ public class FilterCleaner extends FilterFramework {
                 closePorts();
                 break;
             } // catch
+            catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         } // while
     } // run
 } // FilterTemplate

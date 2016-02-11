@@ -36,6 +36,7 @@
  ******************************************************************************************************************/
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class FilterFramework extends Thread {
@@ -48,7 +49,7 @@ public class FilterFramework extends Thread {
     // detect broken pipes on the input port of the filter. This variable will point to
     // the previous filter in the network and when it dies, we know that it has closed its
     // output pipe and will send no more data.
-    private ArrayList<FilterFramework> inputFilters;
+    private ArrayList<FilterFramework> inputFilters = new ArrayList<FilterFramework>();
     private int input_size = 0;
     private int output_size = 0;
     protected byte[] l_arr = new byte[8];
@@ -172,11 +173,11 @@ public class FilterFramework extends Thread {
          ***********************************************************************/
 
         try {
-            size = (byte) pis.read(s_arr);
+            pis.read(s_arr);
+            size = ByteBuffer.wrap(s_arr).getInt();
             buffer = new byte[size];
             pis.read(buffer);
-            
-            /*!!!!*/
+
             return buffer;
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " Pipe read error::" + Error);

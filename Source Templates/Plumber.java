@@ -44,10 +44,10 @@ public class Plumber {
         /****************************************************************************
          * Here we instantiate three filters.
          ****************************************************************************/
-
+    	int[] a = {3,4};
         SourceFilter src = new SourceFilter("SubSetA.dat");  // This is a source filter - see SourceFilter.java
         SinkFilter out = new SinkFilter("Output.txt");  //This is a sink filter - see SinkFilter.java
-        FilterCleaner fl = new FilterCleaner(); // This is a ñleaner filter - see FilterCleaner.java
+        FilterCleaner fl = new FilterCleaner(a); // This is a ñleaner filter - see FilterCleaner.java
         
 
         /****************************************************************************
@@ -64,11 +64,11 @@ public class Plumber {
          * Here we start the filters up.
          ****************************************************************************/
 
-        /*
-        filter1.start();
-        filter2.start();
-        filter3.start();
-        */
+        
+        src.start();
+        fl.start();
+        out.start();
+        
 
     } // main
 } // PlumberTemplate

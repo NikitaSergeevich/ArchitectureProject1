@@ -57,6 +57,8 @@ public class SourceFilter extends FilterFramework {
             in = new DataInputStream(new FileInputStream(fileName));
             System.out.println("\n" + this.getName() + "::Source reading file...");
             HashMap<Integer, Double> frame = new HashMap<Integer, Double>();
+            int id = 0;
+            double value = 0.0;
             //ArrayList<Byte> frame = new ArrayList<Byte>();
             in.read(s_arr);
             
@@ -67,19 +69,20 @@ public class SourceFilter extends FilterFramework {
             	//DateFormat dateFormat = new SimpleDateFormat("yyyy/dd HH:mm:ss");
                 //Date date = new Date();
                 //dateFormat.format(date);
-            	in.read(l_arr);            	
-            	frame.put(ByteBuffer.wrap(s_arr).getInt(), ByteBuffer.wrap(s_arr).getDouble());
+            	in.read(l_arr);
+            	id = ByteBuffer.wrap(s_arr).getInt();
+            	value = ByteBuffer.wrap(l_arr).getDouble();
+            	frame.put(id, value);
             	in.read(s_arr);
             	//bytesRead++;
                 if (ByteBuffer.wrap(s_arr).getInt() == 0)
                 {
-                	byte[] size_buf = serialize((Object)frame.size());
                 	byte[] data_buf = serialize((Object)frame);
-                	/*little endian big endian???*/
                 	int data_size = data_buf.length;
-                	byte[] frame_buf = new byte[4 + data_size];
-                	System.arraycopy(data_buf, 0, frame_buf, 0, data_buf.length);
-                	System.arraycopy(size_buf, 0, frame_buf, data_size, data_buf.length);
+                	byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();                	
+                	byte[] frame_buf = new byte[4 + data_size];                	
+                	System.arraycopy(size_buf, 0, frame_buf, 0, 4);
+                	System.arraycopy(data_buf, 0, frame_buf, 4, data_buf.length);
                 	writeNextFilterOutputPort(frame_buf);
                 	frame.clear();
                 }                
