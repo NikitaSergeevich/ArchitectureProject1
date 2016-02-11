@@ -45,10 +45,9 @@ public class Plumber {
          * Here we instantiate three filters.
          ****************************************************************************/
 
-        //SourceFilter filte = new SourceFilter("SubSetA.dat");
-        // This is a source filter - see SourceFilterTemplate.java
-        //MiddleFilter filter2 = new MiddleFilter();	// This is a standard filter - see FilterTemplate.java
-        //SinkFilter filter3 = new SinkFilter();		// This is a sink filter - see SinkFilterTemplate.java
+        SourceFilter src = new SourceFilter("SubSetA.dat");  // This is a source filter - see SourceFilter.java
+        SinkFilter out = new SinkFilter("Output.txt");  //This is a sink filter - see SinkFilter.java
+        FilterCleaner fl = new FilterCleaner(); // This is a ñleaner filter - see FilterCleaner.java
         
 
         /****************************************************************************
@@ -57,11 +56,9 @@ public class Plumber {
          * must connect filters starting with the sink filter and working your way back to the
          * source as shown here.
          ****************************************************************************/
-
-        /*        
-        filter3.connect(filter2); // This essentially says, "connect filter3's input port to filter2's output port
-        filter2.connect(filter1); // This essentially says, "connect filter2's input port to filter1's output port
-        */
+     
+        out.connect(fl); // This essentially says, "connect filter3's input port to filter2's output port
+        fl.connect(src); // This essentially says, "connect filter2's input port to filter1's output port
 
         /****************************************************************************
          * Here we start the filters up.

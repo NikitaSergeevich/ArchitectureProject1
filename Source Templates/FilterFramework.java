@@ -37,7 +37,6 @@
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class FilterFramework extends Thread {
 
@@ -103,6 +102,7 @@ public class FilterFramework extends Thread {
         	PipedInputStream pis = new PipedInputStream();
         	pis.connect(filter.getfreeport());
             inputFilters.add(filter);
+            inputReadPorts.add(pis);
             input_size++;
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " FilterFramework error connecting::" + Error);
@@ -290,7 +290,7 @@ public class FilterFramework extends Thread {
         }
     }
     
-    public static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+    public Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
         try(ByteArrayInputStream b = new ByteArrayInputStream(bytes)){
             try(ObjectInputStream o = new ObjectInputStream(b)){
                 return o.readObject();
