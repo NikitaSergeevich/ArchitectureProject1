@@ -3,12 +3,7 @@ import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 /******************************************************************************************************************
  * File: SourceFilterTemplate.java
@@ -45,8 +40,6 @@ public class SourceFilter extends FilterFramework {
 	byte dataByte = 0; // The byte of data read from the file
     int bytesRead = 0; // Number of bytes read from the input file.
     int bytesWritten = 0; // Number of bytes written to the stream.
-    byte[] l_arr = new byte[8];
-    byte[] s_arr = new byte[4];
 	
 	public SourceFilter(String _fileName)
 	{
@@ -63,7 +56,8 @@ public class SourceFilter extends FilterFramework {
         try {
             in = new DataInputStream(new FileInputStream(fileName));
             System.out.println("\n" + this.getName() + "::Source reading file...");
-            HashMap<Integer, Double> frame = new HashMap<Integer, Double>();            
+            HashMap<Integer, Double> frame = new HashMap<Integer, Double>();
+            //ArrayList<Byte> frame = new ArrayList<Byte>();
             in.read(s_arr);
             
             while (true) {
@@ -73,15 +67,23 @@ public class SourceFilter extends FilterFramework {
             	//DateFormat dateFormat = new SimpleDateFormat("yyyy/dd HH:mm:ss");
                 //Date date = new Date();
                 //dateFormat.format(date);
-            	in.read(l_arr);
+            	in.read(l_arr);            	
             	frame.put(ByteBuffer.wrap(s_arr).getInt(), ByteBuffer.wrap(s_arr).getDouble());
-            	bytesRead++;
-                if (dataByte == 0)
+            	in.read(s_arr);
+            	//bytesRead++;
+                if (ByteBuffer.wrap(s_arr).getInt() == 0)
                 {
-                	//writeFilterOutputPort(frame);
+                	byte[] size_buf = serialize((Object)frame.size());
+                	byte[] data_buf = serialize((Object)frame);
+                	/*little endian big endian???*/
+                	int data_size = data_buf.length;
+                	byte[] frame_buf = new byte[4 + data_size];
+                	System.arraycopy(data_buf, 0, frame_buf, 0, data_buf.length);
+                	System.arraycopy(size_buf, 0, frame_buf, data_size, data_buf.length);
+                	writeNextFilterOutputPort(frame_buf);
                 	frame.clear();
-                }               
-                bytesWritten++;
+                }                
+                //bytesWritten++;
             }
         } catch (EOFException eoferr) {
 

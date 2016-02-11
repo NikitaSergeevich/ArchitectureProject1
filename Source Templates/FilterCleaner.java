@@ -28,7 +28,7 @@
 public class FilterCleaner extends FilterFramework {
 
     public void run() {
-        byte dataByte;
+        byte[] dataByte;
 
         while (true) {
 
@@ -40,7 +40,7 @@ public class FilterCleaner extends FilterFramework {
              ***************************************************************/
 
             try {
-                dataByte = readFilterInputPort();
+                dataByte = readNextFilterInputPort();
 
                 /***************************************************************
                  * Here we could insert code to operate on the input stream... Then we write a byte
@@ -48,7 +48,7 @@ public class FilterCleaner extends FilterFramework {
                  ***************************************************************/
                 
 
-                writeFilterOutputPort(dataByte);
+                writeNextFilterOutputPort(dataByte);
 
             } catch (EndOfStreamException e) {
 

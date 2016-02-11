@@ -45,11 +45,11 @@ public class Plumber {
          * Here we instantiate three filters.
          ****************************************************************************/
 
-        
-        SourceFilter filter1 = new SourceFilter("SubSetA.dat");	// This is a source filter - see SourceFilterTemplate.java
+        //SourceFilter filte = new SourceFilter("SubSetA.dat");
+        // This is a source filter - see SourceFilterTemplate.java
         //MiddleFilter filter2 = new MiddleFilter();	// This is a standard filter - see FilterTemplate.java
         //SinkFilter filter3 = new SinkFilter();		// This is a sink filter - see SinkFilterTemplate.java
-        */
+        
 
         /****************************************************************************
          * Here we connect the filters starting with the sink filter (filter1) which we connect to

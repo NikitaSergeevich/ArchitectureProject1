@@ -36,18 +36,26 @@
  ******************************************************************************************************************/
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class FilterFramework extends Thread {
 
     // Define filter input and output ports
-    private PipedInputStream inputReadPort = new PipedInputStream();
-    private PipedOutputStream outputWritePort = new PipedOutputStream();
+    private ArrayList<PipedInputStream> inputReadPorts = new ArrayList<PipedInputStream>();
+    private ArrayList<PipedOutputStream> outputWritePorts = new ArrayList<PipedOutputStream>();
 
     // The following reference to a filter is used because java pipes are able to reliably
     // detect broken pipes on the input port of the filter. This variable will point to
     // the previous filter in the network and when it dies, we know that it has closed its
     // output pipe and will send no more data.
-    private FilterFramework inputFilter;
+    private ArrayList<FilterFramework> inputFilters;
+    private int input_size = 0;
+    private int output_size = 0;
+    protected byte[] l_arr = new byte[8];
+    protected byte[] s_arr = new byte[4];
+    int curr_i = 0;
+    int curr_o = 0;
 
     /***************************************************************************
      * InnerClass:: endOfStreamExeception
@@ -92,12 +100,21 @@ public class FilterFramework extends Thread {
     void connect(FilterFramework filter) {
         try {
             // Connect this filter's input to the upstream pipe's output stream
-            inputReadPort.connect(filter.outputWritePort);
-            inputFilter = filter;
+        	PipedInputStream pis = new PipedInputStream();
+        	pis.connect(filter.getfreeport());
+            inputFilters.add(filter);
+            input_size++;
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " FilterFramework error connecting::" + Error);
         } // try-catch
     } // connect
+    
+    PipedOutputStream getfreeport() {
+    	PipedOutputStream pos = new PipedOutputStream();
+    	outputWritePorts.add(pos);
+    	output_size++;
+    	return pos;
+	}
 
     /***************************************************************************
      * CONCRETE METHOD:: readFilterInputPort
@@ -113,8 +130,10 @@ public class FilterFramework extends Thread {
      *
      ****************************************************************************/
 
-    byte readFilterInputPort() throws EndOfStreamException {
-        byte datum = 0;
+    byte[] readNextFilterInputPort() throws EndOfStreamException {
+        int size = 0;
+        PipedInputStream pis = null;
+        byte[] buffer = null;
 
         /***********************************************************************
          * Since delays are possible on upstream filters, we first wait until there is data
@@ -131,13 +150,16 @@ public class FilterFramework extends Thread {
          ***********************************************************************/
 
         try {
-            while (inputReadPort.available() == 0) {
-                if (endOfInputStream()) {
+        	pis = inputReadPorts.get(curr_i);        	        	
+            while (pis.available() == 0) {
+                if (endOfInputStream(curr_i)) {
                     throw new EndOfStreamException("End of input stream reached");
                 } //if
-
                 sleep(250);
             } // while
+            curr_i++;
+        	if (curr_i == input_size)
+        		curr_i = 0;
         } catch (EndOfStreamException e) {
             throw e;
         } catch (Exception e) {
@@ -150,13 +172,16 @@ public class FilterFramework extends Thread {
          ***********************************************************************/
 
         try {
-            datum = (byte) inputReadPort.read();
-            return datum;
+            size = (byte) pis.read(s_arr);
+            buffer = new byte[size];
+            pis.read(buffer);
+            
+            /*!!!!*/
+            return buffer;
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " Pipe read error::" + Error);
-            return datum;
+            return buffer;
         } // try-catch
-
     } // ReadFilterPort
 
     /***************************************************************************
@@ -174,10 +199,14 @@ public class FilterFramework extends Thread {
      *
      ****************************************************************************/
 
-    void writeFilterOutputPort(byte[] datum) {
+    void writeNextFilterOutputPort(byte[] datum) {
         try {
-            outputWritePort.write(datum);
-            outputWritePort.flush();
+        	PipedOutputStream pos = outputWritePorts.get(curr_o);
+        	curr_o++;
+            pos.write(datum);
+            pos.flush();
+        	if (curr_o == output_size)
+        		curr_o = 0;
         } catch (Exception e) {
             System.out.println("\n" + this.getName() + " Pipe write error::" + e);
         } // try-catch
@@ -201,8 +230,8 @@ public class FilterFramework extends Thread {
      *
      ****************************************************************************/
 
-    private boolean endOfInputStream() {
-        return !inputFilter.isAlive();
+    private boolean endOfInputStream(int i) {
+        return !inputFilters.get(i).isAlive();
     } // endOfInputStream
 
     /***************************************************************************
@@ -221,8 +250,12 @@ public class FilterFramework extends Thread {
 
     void closePorts() {
         try {
-            inputReadPort.close();
-            outputWritePort.close();
+        	for (PipedInputStream itr : inputReadPorts) {
+        		itr.close();
+    		}
+        	for (PipedOutputStream itr : outputWritePorts) {
+        		itr.close();
+    		}
         } catch (Exception e) {
             System.out.println("\n" + this.getName() + " ClosePorts error::" + e);
         } // try-catch
@@ -247,5 +280,22 @@ public class FilterFramework extends Thread {
         // The run method should be overridden by the subordinate class. Please
         // see the example applications provided for more details.
     } // run
+    
+    public byte[] serialize(Object obj) throws IOException {
+        try(ByteArrayOutputStream b = new ByteArrayOutputStream()){
+            try(ObjectOutputStream o = new ObjectOutputStream(b)){
+                o.writeObject(obj);
+            }
+            return b.toByteArray();
+        }
+    }
+    
+    public static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+        try(ByteArrayInputStream b = new ByteArrayInputStream(bytes)){
+            try(ObjectInputStream o = new ObjectInputStream(b)){
+                return o.readObject();
+            }
+        }
+    }
 
 } // FilterFramework
