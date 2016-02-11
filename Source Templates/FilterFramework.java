@@ -37,6 +37,7 @@
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FilterFramework extends Thread {
 
@@ -48,7 +49,7 @@ public class FilterFramework extends Thread {
     // detect broken pipes on the input port of the filter. This variable will point to
     // the previous filter in the network and when it dies, we know that it has closed its
     // output pipe and will send no more data.
-    private ArrayList<FilterFramework> inputFilters;
+    private List<FilterFramework> inputFilters;
     private int input_size = 0;
     private int output_size = 0;
     protected byte[] l_arr = new byte[8];
