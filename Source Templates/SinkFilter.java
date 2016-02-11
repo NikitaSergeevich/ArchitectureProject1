@@ -9,7 +9,7 @@ import java.util.HashMap;
  * Project: Assignment 1
  * Copyright: Copyright (c) 2003 Carnegie Mellon University
  * Versions: 1.0 November 2008 - Initial rewrite of original assignment 1 (ajl).
- *
+ * <p>
  * Description:
  * This class serves as a template for creating sink filters. The details of threading, connections
  * writing output are contained in the FilterFramework super class. In order to use this template
@@ -22,25 +22,24 @@ import java.util.HashMap;
  * kind. In this case, only the input port is used by the filter. In cases where the filter is a
  * standard filter or a source filter, you should use the FilterTemplate.java or the
  * SourceFilterTemplate.java as a starting point for creating standard or source filters.
- *
+ * <p>
  * Parameters: None
- *
+ * <p>
  * Internal Methods:
- *
+ * <p>
  * public void run() - this method must be overridden by this class.
- *
  ******************************************************************************************************************/
 
 public class SinkFilter extends FilterFramework {
-	
+
     byte[] dataBytes = null;
     String fileName = null;
     DataOutputStream out = null;
-    
-	public SinkFilter(String _fileName)
-	{
-		fileName = _fileName;
-	}
+
+    public SinkFilter(String _fileName) {
+
+        fileName = _fileName;
+    }
 
     public void run() {
 
@@ -48,14 +47,14 @@ public class SinkFilter extends FilterFramework {
          * This is the main processing loop for the filter. Since this is a sink filter, we read
          * until there is no more data available on the input port.
          **************************************************************/
-    	
-    	try {
-                out = new DataOutputStream(new FileOutputStream(fileName));
-                System.out.println("\n" + this.getName() + "::Source writing file...");
-    	} catch (Exception ex) {
-    		
-    	}
-    	
+
+        try {
+            out = new DataOutputStream(new FileOutputStream(fileName));
+            System.out.println("\n" + this.getName() + "::Source writing file...");
+        } catch (Exception ex) {
+
+        }
+
         while (true) {
             try {
                 /*************************************************************
@@ -65,31 +64,28 @@ public class SinkFilter extends FilterFramework {
                  * portability between filters. However, you must convert output data as needed on
                  * your own.
                  **************************************************************/
-            	
-            	HashMap<Integer, Double> m = null;
-            	dataBytes = readNextFilterInputPort();
-            	Object o = deserialize(dataBytes);
-            	
-            	if (o instanceof HashMap<?, ?>)
-            	{
-            		m = (HashMap<Integer, Double>)o;
-            	}   
+
+                HashMap<Integer, Double> m = null;
+                dataBytes = readNextFilterInputPort();
+                Object o = deserialize(dataBytes);
+
+                if (o instanceof HashMap<?, ?>) {
+                    m = (HashMap<Integer, Double>) o;
+                }
 
                 /*************************************************************
                  * The programmer can insert code for the filter operations here to include writing
                  * the data to some device or file.
                  **************************************************************/
-            	
-            	Double data = null;
-            	for (int i = 0; i < 3; i++)
-            	{
-            		data = m.get(i);
-            		if (data != null)
-            		{
-            			out.write(serialize((Object)data));
-            		}            		
-            	}
-            	
+
+                Double data = null;
+                for (int i = 0; i < 3; i++) {
+                    data = m.get(i);
+                    if (data != null) {
+                        out.write(serialize((Object) data));
+                    }
+                }
+
                 //System.out.println("Sink received: " + dataByte);
             } catch (EndOfStreamException e) {
 
@@ -104,11 +100,11 @@ public class SinkFilter extends FilterFramework {
             catch (IOException e) {
                 closePorts();
                 break;
-			} // catch
+            } // catch
             catch (ClassNotFoundException e) {
-            	closePorts();
+                closePorts();
                 break;
-			} // catch
+            } // catch
         } // while
     } // run
 } // FilterTemplate

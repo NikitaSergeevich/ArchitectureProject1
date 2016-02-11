@@ -1,11 +1,5 @@
-/*.class
-out/
+*.class
 ArchitectureProject1.iml
 .idea/
-
-
-
-
-
-
+out/
 
