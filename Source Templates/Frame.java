@@ -23,4 +23,8 @@ public class Frame implements Serializable {
     public void remove(int i) {
         //TODO
     }
+
+    public void clear() {
+        map.clear();
+    }
 }

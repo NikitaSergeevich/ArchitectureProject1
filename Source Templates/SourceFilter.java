@@ -83,6 +83,7 @@ public class SourceFilter extends FilterFramework {
                 	System.arraycopy(size_buf, 0, frame_buf, 0, 4);
                 	System.arraycopy(data_buf, 0, frame_buf, 4, data_buf.length);
                 	writeNextFilterOutputPort(frame_buf);
+                    frame.clear();
                 }
                 //bytesWritten++;
             }
