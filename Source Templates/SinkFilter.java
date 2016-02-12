@@ -71,21 +71,15 @@ public class SinkFilter extends FilterFramework {
 
                 if (o instanceof HashMap<?, ?>) {
                     m = (HashMap<Integer, Double>) o;
-                }
 
-                /*************************************************************
-                 * The programmer can insert code for the filter operations here to include writing
-                 * the data to some device or file.
-                 **************************************************************/
-
-                Double data = null;
-                for (int i = 0; i < 3; i++) {
-                    data = m.get(i);
-                    if (data != null) {
-                        out.write(Utils.convertObjectToByteArray((Object) data));
+                    Double data = null;
+                    for (int i = 0; i < m.size(); i++) {
+                        data = m.get(i);
+                        if (data != null) {
+                            out.write(Utils.convertObjectToByteArray(data));
+                        }
                     }
                 }
-
                 //System.out.println("Sink received: " + dataByte);
             } catch (EndOfStreamException e) {
 

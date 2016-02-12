@@ -7,7 +7,7 @@ import java.util.HashMap;
  * Course: MSIT-SE-M-04
  * Project: Assignment 1 Copyright: Copyright (c) 2003 Carnegie Mellon University
  * Versions: 1.0 November 2008 - Initial rewrite of original assignment 1 (ajl).
- *
+ * <p>
  * Description:
  * This class serves as a template for creating filters. The details of threading, filter
  * connections, input, and output are contained in the FilterFramework super class. In order to use
@@ -20,22 +20,21 @@ import java.util.HashMap;
  * up-stream filter and its output port is connected to a pipe to a down-stream filter. In cases
  * where the filter is a source or sink, you should use the SourceFilterTemplate.java or
  * SinkFilterTemplate.java as a starting point for creating source or sink filters.
- *
+ * <p>
  * Parameters: None
- *
+ * <p>
  * Internal Methods:
- *
+ * <p>
  * public void run() - this method must be overridden by this class.
- *
  ******************************************************************************************************************/
 
 public class FilterCleaner extends FilterFramework {
-	
-	int[] id_filter = null;
-	
-	public FilterCleaner(int[] ids){
-		id_filter = ids;
-	}
+
+    int[] id_filter = null;
+
+    public FilterCleaner(int[] ids) {
+        id_filter = ids;
+    }
 
     public void run() {
         byte[] dataBytes;
@@ -56,30 +55,27 @@ public class FilterCleaner extends FilterFramework {
                  * Here we could insert code to operate on the input stream... Then we write a byte
                  * out to the output port.
                  ***************************************************************/
-                
-            	HashMap<Integer, Double> m = null;
-            	Object o = Utils.convertByteArrayToObject(dataBytes);
-            	
-            	if (o instanceof HashMap<?, ?>)
-            	{
-            		m = (HashMap<Integer, Double>)o;
-            	}
-              	for (int i:id_filter)
-            	{
-            		if (m.get(i) != null)
-            		{
-            			m.remove(i);
-            		}
-            	}
-              	
-            	byte[] data_buf = Utils.convertObjectToByteArray((Object)m);
-            	int data_size = data_buf.length;
-            	byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();
-            	byte[] frame_buf = new byte[4 + data_size];            	
-            	System.arraycopy(size_buf, 0, frame_buf, 0, 4);
-            	System.arraycopy(data_buf, 0, frame_buf, 4, data_buf.length);
-                writeNextFilterOutputPort(dataBytes);
 
+                HashMap<Integer, Double> m = null;
+                Object o = Utils.convertByteArrayToObject(dataBytes);
+
+                if (o instanceof HashMap<?, ?>) {
+                    m = (HashMap<Integer, Double>) o;
+
+                    for (int i : id_filter) {
+                        if (m.get(i) != null) {
+                            m.remove(i);
+                        }
+                    }
+
+                    byte[] data_buf = Utils.convertObjectToByteArray((Object) m);
+                    int data_size = data_buf.length;
+                    byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();
+                    byte[] frame_buf = new byte[4 + data_size];
+                    System.arraycopy(size_buf, 0, frame_buf, 0, 4);
+                    System.arraycopy(data_buf, 0, frame_buf, 4, data_buf.length);
+                    writeNextFilterOutputPort(dataBytes);
+                }
             } catch (EndOfStreamException e) {
 
                 /***************************************************************
@@ -91,12 +87,12 @@ public class FilterCleaner extends FilterFramework {
                 break;
             } // catch
             catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         } // while
     } // run
 } // FilterTemplate
