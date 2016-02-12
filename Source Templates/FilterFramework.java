@@ -45,6 +45,9 @@ public class FilterFramework extends Thread {
     private List<ObjectInputStream> inputReadPorts = new ArrayList<ObjectInputStream>();
     private List<ObjectOutputStream> outputWritePorts = new ArrayList<ObjectOutputStream>();
 
+    private List<PipedInputStream> inputPipedReadPorts = new ArrayList<PipedInputStream>();
+    private List<PipedOutputStream> outputPipedWritePorts = new ArrayList<PipedOutputStream>();
+
     // The following reference to a filter is used because java pipes are able to reliably
     // detect broken pipes on the input port of the filter. This variable will point to
     // the previous filter in the network and when it dies, we know that it has closed its
@@ -99,21 +102,20 @@ public class FilterFramework extends Thread {
         try {
             // Connect this filter's input to the upstream pipe's output stream
             PipedInputStream pis = new PipedInputStream();
-            filter.getFreePort(pis);
-            ObjectInputStream objectInputStream = new ObjectInputStream(pis);
+            PipedOutputStream pos = new PipedOutputStream();
+            pis.connect(pos);
             inputFilters.add(filter);
-            inputReadPorts.add(objectInputStream);
+            inputPipedReadPorts.add(pis);
+            inputReadPorts.add(new ObjectInputStream(pis));
+            filter.addOutputStream(pos);
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " FilterFramework error connecting::" + Error);
         } // try-catch
     } // connect
 
-    PipedOutputStream getFreePort(PipedInputStream pis) throws IOException {
-        PipedOutputStream pos = new PipedOutputStream();
-        pis.connect(pos);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(pos);
-        outputWritePorts.add(objectOutputStream);
-        return pos;
+    void addOutputStream(PipedOutputStream pos) throws IOException {
+        outputPipedWritePorts.add(pos);
+        outputWritePorts.add(new ObjectOutputStream(pos));
     }
 
     /***************************************************************************
@@ -134,12 +136,9 @@ public class FilterFramework extends Thread {
 
         try {
             pis = inputReadPorts.get(curr_i);
-            while (pis.available() == 0) {
-                if (endOfInputStream(curr_i)) {
-                    throw new EndOfStreamException("End of input stream reached");
-                } //if
-                sleep(250);
-            } // while
+            if (endOfInputStream(curr_i)) {
+                throw new EndOfStreamException("End of input stream reached");
+            } //if
             setNextCurrentInputPort();
         } catch (EndOfStreamException e) {
             throw e;
@@ -168,7 +167,7 @@ public class FilterFramework extends Thread {
     }
 
     private int getInputSize() {
-        return inputReadPorts.size();
+        return inputPipedReadPorts.size();
     }
 
     /***************************************************************************
@@ -187,8 +186,10 @@ public class FilterFramework extends Thread {
 
     void writeNextFilterOutputPort(Object object) {
         try {
-            ObjectOutputStream pos = outputWritePorts.get(curr_o);
-            pos.writeObject(object);
+            ObjectOutputStream os = outputWritePorts.get(curr_o);
+            PipedOutputStream pos = outputPipedWritePorts.get(curr_o);
+            os.writeObject(object);
+            os.flush();
             pos.flush();
             setNextCurrentOutputPort();
         } catch (Exception e) {

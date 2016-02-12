@@ -37,8 +37,6 @@ public class FilterCleaner extends FilterFramework {
     }
 
     public void run() {
-        byte[] dataBytes;
-
         while (true) {
 
             /***************************************************************
