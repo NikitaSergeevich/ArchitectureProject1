@@ -43,14 +43,16 @@ import java.util.List;
 public class FilterFramework extends Thread {
 
     // Define filter input and output ports
-    private ArrayList<PipedInputStream> inputReadPorts = new ArrayList<PipedInputStream>();
-    private ArrayList<PipedOutputStream> outputWritePorts = new ArrayList<PipedOutputStream>();
+    private List<PipedInputStream> inputReadPorts = new ArrayList<PipedInputStream>();
+    private List<PipedOutputStream> outputWritePorts = new ArrayList<PipedOutputStream>();
 
     // The following reference to a filter is used because java pipes are able to reliably
     // detect broken pipes on the input port of the filter. This variable will point to
     // the previous filter in the network and when it dies, we know that it has closed its
     // output pipe and will send no more data.
-    private ArrayList<FilterFramework> inputFilters = new ArrayList<FilterFramework>();
+
+    private List<FilterFramework> inputFilters = new ArrayList<FilterFramework>();
+
     private int input_size = 0;
     private int output_size = 0;
     protected byte[] l_arr = new byte[8];
@@ -102,7 +104,7 @@ public class FilterFramework extends Thread {
         try {
             // Connect this filter's input to the upstream pipe's output stream
         	PipedInputStream pis = new PipedInputStream();
-        	pis.connect(filter.getfreeport());
+        	pis.connect(filter.getFreePort());
             inputFilters.add(filter);
             inputReadPorts.add(pis);
             input_size++;
@@ -111,7 +113,7 @@ public class FilterFramework extends Thread {
         } // try-catch
     } // connect
     
-    PipedOutputStream getfreeport() {
+    PipedOutputStream getFreePort() {
     	PipedOutputStream pos = new PipedOutputStream();
     	outputWritePorts.add(pos);
     	output_size++;
@@ -297,6 +299,9 @@ public class FilterFramework extends Thread {
             try(ObjectInputStream o = new ObjectInputStream(b)){
                 return o.readObject();
             }
+        } catch (Exception e) {
+            System.out.print(e.getStackTrace());
+            return null;
         }
     }
 
