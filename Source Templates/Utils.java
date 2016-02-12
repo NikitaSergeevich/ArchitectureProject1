@@ -15,15 +15,4 @@ public class Utils {
             return b.toByteArray();
         }
     }
-
-    public static Object convertByteArrayToObject(byte[] bytes) throws IOException, ClassNotFoundException {
-        try (ByteArrayInputStream b = new ByteArrayInputStream(bytes)) {
-            try (ObjectInputStream o = new ObjectInputStream(b)) {
-                return o.readObject();
-            }
-        } catch (Exception e) {
-            System.out.print(e.getMessage());
-            return null;
-        }
-    }
 }

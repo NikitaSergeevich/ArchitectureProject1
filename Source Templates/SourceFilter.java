@@ -36,7 +36,6 @@ public class SourceFilter extends FilterFramework {
 	
 	String fileName = null; // Input data file.
 	DataInputStream in = null; // File stream reference.
-	byte dataByte = 0; // The byte of data read from the file
     int bytesRead = 0; // Number of bytes read from the input file.
     int bytesWritten = 0; // Number of bytes written to the stream.
 	
@@ -58,7 +57,6 @@ public class SourceFilter extends FilterFramework {
             Frame frame = new Frame();
             int id = 0;
             double value = 0.0;
-            //ArrayList<Byte> frame = new ArrayList<Byte>();
             in.read(s_arr);
             
             while (true) {
@@ -69,20 +67,14 @@ public class SourceFilter extends FilterFramework {
                 //Date date = new Date();
                 //dateFormat.format(date);
             	in.read(l_arr);
-            	id = ByteBuffer.wrap(s_arr).getInt();
-            	value = ByteBuffer.wrap(l_arr).getDouble();
-            	frame.put(id, value);
-            	in.read(s_arr);
-            	//bytesRead++;
+                id = ByteBuffer.wrap(s_arr).getInt();
+                value = ByteBuffer.wrap(l_arr).getDouble();
+                frame.put(id, value);
+                in.read(s_arr);
+                //bytesRead++;
                 if (ByteBuffer.wrap(s_arr).getInt() == 0)
                 {
-                	byte[] data_buf = Utils.convertObjectToByteArray((Object)frame);
-                	int data_size = data_buf.length;
-                	byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();                	
-                	byte[] frame_buf = new byte[4 + data_size];                	
-                	System.arraycopy(size_buf, 0, frame_buf, 0, 4);
-                	System.arraycopy(data_buf, 0, frame_buf, 4, data_buf.length);
-                	writeNextFilterOutputPort(frame_buf);
+                	writeNextFilterOutputPort(frame);
                     frame.clear();
                 }
                 //bytesWritten++;

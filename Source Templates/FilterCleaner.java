@@ -49,32 +49,23 @@ public class FilterCleaner extends FilterFramework {
              ***************************************************************/
 
             try {
-                dataBytes = readNextFilterInputPort();
-
                 /***************************************************************
                  * Here we could insert code to operate on the input stream... Then we write a byte
                  * out to the output port.
                  ***************************************************************/
 
-                Frame frame = null;
-                Object o = Utils.convertByteArrayToObject(dataBytes);
+
+                Object o = readNextFilterInputPort();
 
                 if (o instanceof Frame) {
-                    frame = (Frame) o;
+                    Frame frame = (Frame) o;
 
                     for (int i : id_filter) {
                         if (frame.get(i) != null) {
                             frame.remove(i);
                         }
                     }
-
-                    byte[] data_buf = Utils.convertObjectToByteArray(frame);
-                    int data_size = data_buf.length;
-                    byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();
-                    byte[] frame_buf = new byte[4 + data_size];
-                    System.arraycopy(size_buf, 0, frame_buf, 0, 4);
-                    System.arraycopy(data_buf, 0, frame_buf, 4, data_buf.length);
-                    writeNextFilterOutputPort(frame_buf);
+                    writeNextFilterOutputPort(frame);
                 }
             } catch (EndOfStreamException e) {
 
@@ -85,13 +76,6 @@ public class FilterCleaner extends FilterFramework {
 
                 closePorts();
                 break;
-            } // catch
-            catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
         } // while
     } // run

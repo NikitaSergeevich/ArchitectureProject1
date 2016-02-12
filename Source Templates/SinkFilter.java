@@ -64,12 +64,10 @@ public class SinkFilter extends FilterFramework {
                  * your own.
                  **************************************************************/
 
-                Frame frame = null;
-                dataBytes = readNextFilterInputPort();
-                Object o = Utils.convertByteArrayToObject(dataBytes);
+                Object o = readNextFilterInputPort();
 
                 if (o instanceof Frame) {
-                    frame = (Frame) o;
+                    Frame frame = (Frame) o;
 
                     Double data = null;
                     for (int i = 0; i < frame.size(); i++) {
@@ -91,10 +89,6 @@ public class SinkFilter extends FilterFramework {
                 break;
             } // catch
             catch (IOException e) {
-                closePorts();
-                break;
-            } // catch
-            catch (ClassNotFoundException e) {
                 closePorts();
                 break;
             } // catch
