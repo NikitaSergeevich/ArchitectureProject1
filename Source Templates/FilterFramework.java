@@ -106,16 +106,18 @@ public class FilterFramework extends Thread {
             pis.connect(pos);
             inputFilters.add(filter);
             inputPipedReadPorts.add(pis);
-            inputReadPorts.add(new ObjectInputStream(pis));
-            filter.addOutputStream(pos);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(pos);
+            ObjectInputStream objectInputStream = new ObjectInputStream(pis);
+            inputReadPorts.add(objectInputStream);
+            filter.addOutputStream(pos, objectOutputStream);
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " FilterFramework error connecting::" + Error);
         } // try-catch
     } // connect
 
-    void addOutputStream(PipedOutputStream pos) throws IOException {
+    void addOutputStream(PipedOutputStream pos, ObjectOutputStream objectOutputStream) throws IOException {
         outputPipedWritePorts.add(pos);
-        outputWritePorts.add(new ObjectOutputStream(pos));
+        outputWritePorts.add(objectOutputStream);
     }
 
     /***************************************************************************
