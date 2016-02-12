@@ -56,19 +56,19 @@ public class FilterCleaner extends FilterFramework {
                  * out to the output port.
                  ***************************************************************/
 
-                HashMap<Integer, Double> m = null;
+                Frame frame = null;
                 Object o = Utils.convertByteArrayToObject(dataBytes);
 
-                if (o instanceof HashMap<?, ?>) {
-                    m = (HashMap<Integer, Double>) o;
+                if (o instanceof Frame) {
+                    frame = (Frame) o;
 
                     for (int i : id_filter) {
-                        if (m.get(i) != null) {
-                            m.remove(i);
+                        if (frame.get(i) != null) {
+                            frame.remove(i);
                         }
                     }
 
-                    byte[] data_buf = Utils.convertObjectToByteArray(m);
+                    byte[] data_buf = Utils.convertObjectToByteArray(frame);
                     int data_size = data_buf.length;
                     byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();
                     byte[] frame_buf = new byte[4 + data_size];

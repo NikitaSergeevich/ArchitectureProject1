@@ -1,7 +1,6 @@
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
 /******************************************************************************************************************
  * File: SinkFilterTemplate.java
@@ -65,16 +64,16 @@ public class SinkFilter extends FilterFramework {
                  * your own.
                  **************************************************************/
 
-                HashMap<Integer, Double> m = null;
+                Frame frame = null;
                 dataBytes = readNextFilterInputPort();
                 Object o = Utils.convertByteArrayToObject(dataBytes);
 
-                if (o instanceof HashMap<?, ?>) {
-                    m = (HashMap<Integer, Double>) o;
+                if (o instanceof Frame) {
+                    frame = (Frame) o;
 
                     Double data = null;
-                    for (int i = 0; i < m.size(); i++) {
-                        data = m.get(i);
+                    for (int i = 0; i < frame.size(); i++) {
+                        data = frame.get(i);
                         if (data != null) {
                             out.write(Utils.convertObjectToByteArray(data));
                         }

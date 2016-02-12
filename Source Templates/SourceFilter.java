@@ -3,7 +3,6 @@ import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 
 /******************************************************************************************************************
  * File: SourceFilterTemplate.java
@@ -56,7 +55,7 @@ public class SourceFilter extends FilterFramework {
         try {
             in = new DataInputStream(new FileInputStream(fileName));
             System.out.println("\n" + this.getName() + "::Source reading file...");
-            HashMap<Integer, Double> frame = new HashMap<Integer, Double>();
+            Frame frame = new Frame();
             int id = 0;
             double value = 0.0;
             //ArrayList<Byte> frame = new ArrayList<Byte>();
@@ -84,8 +83,7 @@ public class SourceFilter extends FilterFramework {
                 	System.arraycopy(size_buf, 0, frame_buf, 0, 4);
                 	System.arraycopy(data_buf, 0, frame_buf, 4, data_buf.length);
                 	writeNextFilterOutputPort(frame_buf);
-                	frame.clear();
-                }                
+                }
                 //bytesWritten++;
             }
         } catch (EOFException eoferr) {
