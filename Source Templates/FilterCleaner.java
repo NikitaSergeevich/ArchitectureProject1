@@ -68,13 +68,13 @@ public class FilterCleaner extends FilterFramework {
                         }
                     }
 
-                    byte[] data_buf = Utils.convertObjectToByteArray((Object) m);
+                    byte[] data_buf = Utils.convertObjectToByteArray(m);
                     int data_size = data_buf.length;
                     byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();
                     byte[] frame_buf = new byte[4 + data_size];
                     System.arraycopy(size_buf, 0, frame_buf, 0, 4);
                     System.arraycopy(data_buf, 0, frame_buf, 4, data_buf.length);
-                    writeNextFilterOutputPort(dataBytes);
+                    writeNextFilterOutputPort(frame_buf);
                 }
             } catch (EndOfStreamException e) {
 

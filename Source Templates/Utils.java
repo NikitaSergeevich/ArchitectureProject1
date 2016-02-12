@@ -22,7 +22,7 @@ public class Utils {
                 return o.readObject();
             }
         } catch (Exception e) {
-            System.out.print(e.getStackTrace());
+            System.out.print(e.getMessage());
             return null;
         }
     }
