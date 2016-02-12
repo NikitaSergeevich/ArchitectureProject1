@@ -77,7 +77,7 @@ public class SourceFilter extends FilterFramework {
             	//bytesRead++;
                 if (ByteBuffer.wrap(s_arr).getInt() == 0)
                 {
-                	byte[] data_buf = serialize((Object)frame);
+                	byte[] data_buf = Utils.convertObjectToByteArray((Object)frame);
                 	int data_size = data_buf.length;
                 	byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();                	
                 	byte[] frame_buf = new byte[4 + data_size];                	

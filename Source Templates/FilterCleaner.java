@@ -58,7 +58,7 @@ public class FilterCleaner extends FilterFramework {
                  ***************************************************************/
                 
             	HashMap<Integer, Double> m = null;
-            	Object o = deserialize(dataBytes);
+            	Object o = Utils.convertByteArrayToObject(dataBytes);
             	
             	if (o instanceof HashMap<?, ?>)
             	{
@@ -72,7 +72,7 @@ public class FilterCleaner extends FilterFramework {
             		}
             	}
               	
-            	byte[] data_buf = serialize((Object)m);
+            	byte[] data_buf = Utils.convertObjectToByteArray((Object)m);
             	int data_size = data_buf.length;
             	byte[] size_buf = ByteBuffer.allocate(4).putInt(data_size).array();
             	byte[] frame_buf = new byte[4 + data_size];            	

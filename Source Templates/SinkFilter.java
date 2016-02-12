@@ -67,7 +67,7 @@ public class SinkFilter extends FilterFramework {
 
                 HashMap<Integer, Double> m = null;
                 dataBytes = readNextFilterInputPort();
-                Object o = deserialize(dataBytes);
+                Object o = Utils.convertByteArrayToObject(dataBytes);
 
                 if (o instanceof HashMap<?, ?>) {
                     m = (HashMap<Integer, Double>) o;
@@ -82,7 +82,7 @@ public class SinkFilter extends FilterFramework {
                 for (int i = 0; i < 3; i++) {
                     data = m.get(i);
                     if (data != null) {
-                        out.write(serialize((Object) data));
+                        out.write(Utils.convertObjectToByteArray((Object) data));
                     }
                 }
 
