@@ -99,7 +99,7 @@ public class FilterFramework extends Thread {
         try {
             // Connect this filter's input to the upstream pipe's output stream
             PipedInputStream pis = new PipedInputStream();
-            pis.connect(filter.getFreePort());
+            filter.getFreePort(pis);
             ObjectInputStream objectInputStream = new ObjectInputStream(pis);
             inputFilters.add(filter);
             inputReadPorts.add(objectInputStream);
@@ -108,8 +108,9 @@ public class FilterFramework extends Thread {
         } // try-catch
     } // connect
 
-    PipedOutputStream getFreePort() throws IOException {
+    PipedOutputStream getFreePort(PipedInputStream pis) throws IOException {
         PipedOutputStream pos = new PipedOutputStream();
+        pis.connect(pos);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(pos);
         outputWritePorts.add(objectOutputStream);
         return pos;
