@@ -132,13 +132,16 @@ public class FilterFramework extends Thread {
      ****************************************************************************/
 
     Object readNextFilterInputPort() throws EndOfStreamException {
-        ObjectInputStream pis = null;
-
+        ObjectInputStream ois = null;
+        PipedInputStream pis = null;
         try {
-            pis = inputReadPorts.get(curr_i);
-            if (endOfInputStream(curr_i)) {
-                throw new EndOfStreamException("End of input stream reached");
-            } //if
+            pis = inputPipedReadPorts.get(curr_i);
+            while (pis.available() == 0) {
+                if (endOfInputStream(curr_i)) {
+                    throw new EndOfStreamException("End of input stream reached");
+                } //if
+                sleep(250);
+            } // while
             setNextCurrentInputPort();
         } catch (EndOfStreamException e) {
             throw e;
@@ -152,7 +155,7 @@ public class FilterFramework extends Thread {
          ***********************************************************************/
 
         try {
-            Object readObject = pis.readObject();
+            Object readObject = ois.readObject();
             return readObject;
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " Pipe read error::" + Error);
