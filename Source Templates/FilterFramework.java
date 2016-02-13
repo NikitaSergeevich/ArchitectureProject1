@@ -138,12 +138,10 @@ public class FilterFramework extends Thread {
         PipedInputStream pis = null;
         try {
             pis = inputPipedReadPorts.get(curr_i);
-            while (pis.available() == 0) {
-                if (endOfInputStream(curr_i)) {
-                    throw new EndOfStreamException("End of input stream reached");
-                } //if
-                sleep(250);
-            } // while
+            ois = inputReadPorts.get(curr_i);
+            if (endOfInputStream(curr_i)) {
+                throw new EndOfStreamException("End of input stream reached");
+            } //if
             setNextCurrentInputPort();
         } catch (EndOfStreamException e) {
             throw e;
