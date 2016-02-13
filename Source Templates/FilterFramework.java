@@ -157,6 +157,7 @@ public class FilterFramework extends Thread {
             System.out.print("Object is going to be read \n");
             Object readObject = ois.readObject();
             System.out.print("Object is read \n");
+
             return readObject;
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " Pipe read error::" + Error);
@@ -197,6 +198,7 @@ public class FilterFramework extends Thread {
             os.flush();
             pos.flush();
             System.out.print("Object is  written \n");
+            sleep(100);
             setNextCurrentOutputPort();
         } catch (Exception e) {
             System.out.println("\n" + this.getName() + " Pipe write error::" + e);

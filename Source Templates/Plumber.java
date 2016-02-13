@@ -74,11 +74,11 @@ public class Plumber {
 
         
         src.start();
-        Thread.sleep(90);
+        Thread.sleep(190);
         fl.start();
-        Thread.sleep(90);
+        Thread.sleep(190);
         fvc.start();
-        Thread.sleep(90);
+        Thread.sleep(190);
         out.start();
         
 

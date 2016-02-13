@@ -54,7 +54,7 @@ public class SourceFilter extends FilterFramework {
                 id = in.readInt();
                 if (id == 0) {
                     writeNextFilterOutputPort(frame);
-                    frame.clear();
+                    frame = new Frame();
                     frame.setTime(in.readLong());
                 } else {
                     frame.put(id, in.readDouble());
