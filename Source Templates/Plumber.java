@@ -39,13 +39,13 @@
  ******************************************************************************************************************/
 public class Plumber {
 
-    public static void main(String argv[]) {
+    public static void main(String argv[]) throws InterruptedException {
 
         /****************************************************************************
          * Here we instantiate three filters.
          ****************************************************************************/
     	int[] a = {3,4};
-        SourceFilter src = new SourceFilter("C:\\Innopolis\\IDEA\\ArchitectureProject1\\out\\production\\ArchitectureProject1\\SubSetA.dat");  // This is a source filter - see SourceFilter.java
+        SourceFilter src = new SourceFilter("SubSetA.dat");  // This is a source filter - see SourceFilter.java
         SinkFilter out = new SinkFilter("Output.txt");  //This is a sink filter - see SinkFilter.java
         FilterCleaner fl = new FilterCleaner(a); // This is a �leaner filter - see FilterCleaner.java
         
@@ -66,7 +66,9 @@ public class Plumber {
 
         
         src.start();
+        Thread.sleep(1000);
         fl.start();
+        Thread.sleep(1000);
         out.start();
         
 
