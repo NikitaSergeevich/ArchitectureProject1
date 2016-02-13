@@ -4,10 +4,11 @@ import java.io.IOException;
 
 /******************************************************************************************************************
  * File: SinkFilterTemplate.java
- * Course: MSIT-SE-M-04
+ * Course: MSIT-SE
  * Project: Assignment 1
- * Copyright: Copyright (c) 2003 Carnegie Mellon University
- * Versions: 1.0 November 2008 - Initial rewrite of original assignment 1 (ajl).
+ * Copyright: Copyright (c) 2016 Innopolis University
+ * Versions: 1.0 February 2016
+ * 
  * <p>
  * Description:
  * This class serves as a template for creating sink filters. The details of threading, connections
@@ -51,17 +52,14 @@ public class SinkFilter extends FilterFramework {
             out = new DataOutputStream(new FileOutputStream(fileName));
             System.out.println("\n" + this.getName() + "::Source writing file...");
         } catch (Exception ex) {
-
+            closePorts();
         }
 
         while (true) {
             try {
                 /*************************************************************
-                 * Here we read a byte from the input port. Note that regardless how the data is
-                 * written, data must be read one byte at a time from the input pipe. This has been
-                 * done to adhere to the pipe and filter paradigm and provide a high degree of
-                 * portability between filters. However, you must convert output data as needed on
-                 * your own.
+                 * Here we read an object from the input port. Then we check if
+                 * object is an instance of Frame class. If so, 
                  **************************************************************/
 
                 Object o = readNextFilterInputPort();
@@ -69,9 +67,9 @@ public class SinkFilter extends FilterFramework {
                 if (o instanceof Frame) {
                     Frame frame = (Frame) o;
                     StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < frame.size(); i++) {
-                        sb.append(String.format("id: %s , value: %s", i, frame.get(i)));
-                    }
+                    for (Integer key : frame.getKeySet()) {
+                    	sb.append(String.format("id: %s , value: %s", key, frame.get(key)));
+					}
                     sb.append("\n");
                     out.write(sb.toString().getBytes());
                 }

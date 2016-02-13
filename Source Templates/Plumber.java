@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /******************************************************************************************************************
  * File: PlumberTemplate.java
  * Course: MSIT-SE-M-04
@@ -44,10 +47,14 @@ public class Plumber {
         /****************************************************************************
          * Here we instantiate three filters.
          ****************************************************************************/
-    	int[] a = {3,4};
-        SourceFilter src = new SourceFilter("C:\\Innopolis\\IDEA\\ArchitectureProject1\\out\\production\\ArchitectureProject1\\SubSetA.dat");  // This is a source filter - see SourceFilter.java
+    	int[] ids = {Frame.PRESSURE, Frame.ATTITUDE, Frame.VELOCITY};
+        SourceFilter src = new SourceFilter("SubSetA.dat");  // This is a source filter - see SourceFilter.java
         SinkFilter out = new SinkFilter("Output.txt");  //This is a sink filter - see SinkFilter.java
-        FilterCleaner fl = new FilterCleaner(a); // This is a �leaner filter - see FilterCleaner.java
+        FilterCleaner fl = new FilterCleaner(ids); // This is a �leaner filter - see FilterCleaner.java
+        List<Converter> converters = new ArrayList<Converter>();
+        converters.add(new TemperatureConv());
+        converters.add(new AltitudeConv());
+		FrameValuesConverter fvc = new FrameValuesConverter(converters ); // This is a �leaner filter - see FilterCleaner.java
         
 
         /****************************************************************************
@@ -57,7 +64,8 @@ public class Plumber {
          * source as shown here.
          ****************************************************************************/
      
-        out.connect(fl); // This essentially says, "connect filter3's input port to filter2's output port
+        out.connect(fvc); // This essentially says, "connect filter3's input port to filter2's output port
+        fvc.connect(fl); // This essentially says, "connect filter3's input port to filter2's output port
         fl.connect(src); // This essentially says, "connect filter2's input port to filter1's output port
 
         /****************************************************************************
@@ -66,9 +74,11 @@ public class Plumber {
 
         
         src.start();
-        Thread.sleep(9);
+        Thread.sleep(90);
         fl.start();
-        Thread.sleep(9);
+        Thread.sleep(90);
+        fvc.start();
+        Thread.sleep(90);
         out.start();
         
 
