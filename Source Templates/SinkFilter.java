@@ -68,14 +68,12 @@ public class SinkFilter extends FilterFramework {
 
                 if (o instanceof Frame) {
                     Frame frame = (Frame) o;
-
-                    Double data = null;
+                    StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < frame.size(); i++) {
-                        data = frame.get(i);
-                        if (data != null) {
-                            out.write(Utils.convertObjectToByteArray(data));
-                        }
+                        sb.append(String.format("id: %s , value: %s", i, frame.get(i)));
                     }
+                    sb.append("\n");
+                    out.write(sb.toString().getBytes());
                 }
                 //System.out.println("Sink received: " + dataByte);
             } catch (EndOfStreamException e) {
