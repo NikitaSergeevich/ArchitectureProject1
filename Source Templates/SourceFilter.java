@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /******************************************************************************************************************
- * File: SourceFilterTemplate.java
+ * File: SourceFilter.java
  * Course: MSIT-SE
  * Project: Assignment 1
  * Copyright: Copyright (c) 2016 Innopolis University
