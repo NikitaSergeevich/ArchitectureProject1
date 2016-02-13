@@ -1,6 +1,7 @@
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 /******************************************************************************************************************
  * File: SinkFilterTemplate.java
@@ -8,7 +9,7 @@ import java.io.IOException;
  * Project: Assignment 1
  * Copyright: Copyright (c) 2016 Innopolis University
  * Versions: 1.0 February 2016
- * 
+ * <p>
  * <p>
  * Description:
  * This class serves as a template for creating sink filters. The details of threading, connections
@@ -67,9 +68,10 @@ public class SinkFilter extends FilterFramework {
                 if (o instanceof Frame) {
                     Frame frame = (Frame) o;
                     StringBuilder sb = new StringBuilder();
+                    sb.append(String.format("id: %s , value: %s", 0, new Date(frame.getTime())));
                     for (Integer key : frame.getKeySet()) {
-                    	sb.append(String.format("id: %s , value: %s", key, frame.get(key)));
-					}
+                        sb.append(String.format("id: %s , value: %s", key, frame.get(key)));
+                    }
                     sb.append("\n");
                     out.write(sb.toString().getBytes());
                 }

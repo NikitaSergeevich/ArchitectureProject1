@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
  * Project: Assignment 1
  * Copyright: Copyright (c) 2016 Innopolis University
  * Versions: 1.0 February 2016
- *
+ * <p>
  * Description:
  * This class serves as a template for creating source filters. The details of threading,
  * connections writing output are contained in the FilterFramework super class. In order to use this
@@ -23,26 +23,24 @@ import java.nio.ByteBuffer;
  * used. In cases where the filter is a standard filter or a sink filter, you should use the
  * FilterTemplate.java or SinkFilterTemplate.java as a starting point for creating standard or sink
  * filters.
- *
+ * <p>
  * Parameters: None
- *
+ * <p>
  * Internal Methods:
- *
+ * <p>
  * public void run() - this method must be overridden by this class.
- *
  ******************************************************************************************************************/
 
 public class SourceFilter extends FilterFramework {
-	
-	String fileName = null; // Input data file.
-	DataInputStream in = null; // File stream reference.
+
+    String fileName = null; // Input data file.
+    DataInputStream in = null; // File stream reference.
     int bytesRead = 0; // Number of bytes read from the input file.
     int bytesWritten = 0; // Number of bytes written to the stream.
-	
-	public SourceFilter(String _fileName)
-	{
-		fileName = _fileName;
-	}
+
+    public SourceFilter(String _fileName) {
+        fileName = _fileName;
+    }
 
     public void run() {
 
@@ -58,23 +56,26 @@ public class SourceFilter extends FilterFramework {
             int id = 0;
             double value = 0.0;
             in.read(s_arr);
-            
+
             while (true) {
                 /***********************************************************************************
                  * Here we open the file and write a message to the terminal.
                  ***********************************************************************************/
-            	//DateFormat dateFormat = new SimpleDateFormat("yyyy/dd HH:mm:ss");
+                //DateFormat dateFormat = new SimpleDateFormat("yyyy/dd HH:mm:ss");
                 //Date date = new Date();
                 //dateFormat.format(date);
-            	in.read(l_arr);
+                in.read(l_arr);
                 id = ByteBuffer.wrap(s_arr).getInt();
-                value = ByteBuffer.wrap(l_arr).getDouble();
-                frame.put(id, value);
+                if (id == 0) {
+                    frame.setTime(ByteBuffer.wrap(l_arr).getLong());
+                } else {
+                    value = ByteBuffer.wrap(l_arr).getDouble();
+                    frame.put(id, value);
+                }
                 in.read(s_arr);
                 //bytesRead++;
-                if (ByteBuffer.wrap(s_arr).getInt() == 0)
-                {
-                	writeNextFilterOutputPort(frame);
+                if (ByteBuffer.wrap(s_arr).getInt() == 0) {
+                    writeNextFilterOutputPort(frame);
                     frame.clear();
                 }
                 //bytesWritten++;
@@ -97,7 +98,7 @@ public class SourceFilter extends FilterFramework {
                 /***********************************************************************************
                  * The following exception is raised should we have a problem closing the file.
                  ***********************************************************************************/
-            
+
                 System.out.println(
                         "\n" + this.getName() + "::Problem closing input data file::" + closeerr);
             }

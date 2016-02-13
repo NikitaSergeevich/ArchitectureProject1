@@ -3,6 +3,6 @@ public class AltitudeConv implements Converter{
 	
 	@Override
 	public void convert(Frame frame) {              
-        frame.put(Frame.AlTITUDE, frame.get(Frame.AlTITUDE) / 3.2808);		
+        frame.put(Frame.ALTITUDE, frame.get(Frame.ALTITUDE) / 3.2808);
 	}
 }
