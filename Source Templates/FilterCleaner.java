@@ -39,8 +39,9 @@ public class FilterCleaner extends FilterFramework {
     public void run() {
         while (true) {
             try {
+                System.out.print("Cleaner is goint to read \n");
                 Object o = readNextFilterInputPort();
-
+                System.out.print(o + "\n");
                 if (o instanceof Frame) {
                     Frame frame = (Frame) o;
 

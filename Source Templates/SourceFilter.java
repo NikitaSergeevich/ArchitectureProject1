@@ -48,9 +48,10 @@ public class SourceFilter extends FilterFramework {
             System.out.println("\n" + this.getName() + "::Source reading file...");
 
             Frame frame = new Frame();
-
-            while (true) {
-                int id = in.readInt();
+            int id = in.readInt();
+            frame.setTime(in.readLong());
+            while (in.available() > 0) {
+                id = in.readInt();
                 if (id == 0) {
                     writeNextFilterOutputPort(frame);
                     frame.clear();
@@ -58,6 +59,12 @@ public class SourceFilter extends FilterFramework {
                 } else {
                     frame.put(id, in.readDouble());
                 }
+            }
+            writeNextFilterOutputPort(frame);
+            System.out.print(frame.getTime() + "\n");
+            while (true) {
+
+
             }
         } catch (EOFException eoferr) {
 
