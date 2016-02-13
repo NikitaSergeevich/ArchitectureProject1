@@ -48,7 +48,7 @@ public class Plumber {
          * Here we instantiate three filters.
          ****************************************************************************/
     	int[] ids = {Frame.PRESSURE, Frame.ATTITUDE, Frame.VELOCITY};
-        SourceFilter src = new SourceFilter("SubSetA.dat");  // This is a source filter - see SourceFilter.java
+        SourceFilter src = new SourceFilter("C:\\Innopolis\\IDEA\\ArchitectureProject1\\out\\SubSetA.dat");  // This is a source filter - see SourceFilter.java
         SinkFilter out = new SinkFilter("Output.txt");  //This is a sink filter - see SinkFilter.java
         FilterCleaner fl = new FilterCleaner(ids); // This is a �leaner filter - see FilterCleaner.java
         List<Converter> converters = new ArrayList<Converter>();

@@ -2,7 +2,6 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 /******************************************************************************************************************
  * File: SourceFilter.java
@@ -44,41 +43,21 @@ public class SourceFilter extends FilterFramework {
 
     public void run() {
 
-        /*************************************************************
-         * This is the main processing loop for the filter. Since this is a source filter, the
-         * programmer will have to determine when the loop ends.
-         **************************************************************/
-
         try {
             in = new DataInputStream(new FileInputStream(fileName));
             System.out.println("\n" + this.getName() + "::Source reading file...");
+
             Frame frame = new Frame();
-            int id = 0;
-            double value = 0.0;
-            in.read(s_arr);
 
             while (true) {
-                /***********************************************************************************
-                 * Here we open the file and write a message to the terminal.
-                 ***********************************************************************************/
-                //DateFormat dateFormat = new SimpleDateFormat("yyyy/dd HH:mm:ss");
-                //Date date = new Date();
-                //dateFormat.format(date);
-                in.read(l_arr);
-                id = ByteBuffer.wrap(s_arr).getInt();
+                int id = in.readInt();
                 if (id == 0) {
-                    frame.setTime(ByteBuffer.wrap(l_arr).getLong());
-                } else {
-                    value = ByteBuffer.wrap(l_arr).getDouble();
-                    frame.put(id, value);
-                }
-                in.read(s_arr);
-                //bytesRead++;
-                if (ByteBuffer.wrap(s_arr).getInt() == 0) {
                     writeNextFilterOutputPort(frame);
                     frame.clear();
+                    frame.setTime(in.readLong());
+                } else {
+                    frame.put(id, in.readDouble());
                 }
-                //bytesWritten++;
             }
         } catch (EOFException eoferr) {
 
