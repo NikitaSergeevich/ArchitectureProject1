@@ -137,7 +137,6 @@ public class FilterFramework extends Thread {
         ObjectInputStream ois = null;
         PipedInputStream pis = null;
         try {
-            pis = inputPipedReadPorts.get(curr_i);
             ois = inputReadPorts.get(curr_i);
             if (endOfInputStream(curr_i)) {
                 throw new EndOfStreamException("End of input stream reached");

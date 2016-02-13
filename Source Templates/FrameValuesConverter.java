@@ -1,10 +1,12 @@
+import java.util.List;
+
 /******************************************************************************************************************
- * File: FilterTempConverter.java
+ * File: FrameValuesConverter.java
  * Course: MSIT-SE
  * Project: Assignment 1
  * Copyright: Copyright (c) 2016 Innopolis University
  * Versions: 1.0 February 2016
- * 
+ * <p>
  * <p>
  * Description:
  * This class serves as a template for creating filters. The details of threading, filter
@@ -26,12 +28,12 @@
  * public void run() - this method must be overridden by this class.
  ******************************************************************************************************************/
 
-public class FilterTempConverter extends FilterFramework {
+public class FrameValuesConverter extends FilterFramework {
 
-    int id_temp = 0;
+    private List<Converter> converters;
 
-    public FilterTempConverter(int id) {
-    	id_temp = id;
+    public FrameValuesConverter(List<Converter> converters) {
+        this.converters = converters;
     }
 
     public void run() {
@@ -54,10 +56,11 @@ public class FilterTempConverter extends FilterFramework {
 
                 if (o instanceof Frame) {
                     Frame frame = (Frame) o;
-                   
-                    double t_c = (frame.get(id_temp) - 32) / 1.8;                    
-                    frame.put(id_temp, t_c);
-                    
+                    for (Converter converter :
+                            converters) {
+                        converter.convert(frame);
+                    }
+
                     writeNextFilterOutputPort(frame);
                 }
             } catch (EndOfStreamException e) {

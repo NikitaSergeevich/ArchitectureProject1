@@ -38,21 +38,7 @@ public class FilterCleaner extends FilterFramework {
 
     public void run() {
         while (true) {
-
-            /***************************************************************
-             * The program can insert code for the filter operations here. Note that data must be
-             * received and sent one byte at a time. This has been done to adhere to the pipe and
-             * filter paradigm and provide a high degree of portabilty between filters. However, you
-             * must reconstruct data on your own. First we read a byte from the input stream...
-             ***************************************************************/
-
             try {
-                /***************************************************************
-                 * Here we could insert code to operate on the input stream... Then we write a byte
-                 * out to the output port.
-                 ***************************************************************/
-
-
                 Object o = readNextFilterInputPort();
 
                 if (o instanceof Frame) {
@@ -66,12 +52,6 @@ public class FilterCleaner extends FilterFramework {
                     writeNextFilterOutputPort(frame);
                 }
             } catch (EndOfStreamException e) {
-
-                /***************************************************************
-                 * When we reach the end of the input stream, an exception is thrown which is shown
-                 * below. At this point, you should finish up any processing, close your ports and exit.
-                 ***************************************************************/
-
                 closePorts();
                 break;
             }
