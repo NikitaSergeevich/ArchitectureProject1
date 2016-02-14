@@ -14,7 +14,6 @@ public class FilterFramework extends Thread {
     private List<PipedInputStream> inputPipedReadPorts = new ArrayList<PipedInputStream>();
     private List<PipedOutputStream> outputPipedWritePorts = new ArrayList<PipedOutputStream>();
 
-    int curr_i = 0;
     /***************************************************************************
      * CONCRETE METHOD:: connect
      * <p>
@@ -63,16 +62,13 @@ public class FilterFramework extends Thread {
      * Exceptions: IOExecption, EndOfStreamException (rethrown)
      ****************************************************************************/
 
-    Frame readNextFilterInputPort() {
-        ObjectInputStream ois = null;
-        try {
-            ois = inputReadPorts.get(curr_i);
-            setNextCurrentInputPort();
-        } catch (Exception e) {
-            System.out.println("\n" + this.getName() + " Error in read port wait loop::" + e);
-        } // try-catch
+    Frame readNextFilterInputPort () {
+        return readNextFilterInputPort(0);
+    }
 
+    Frame readNextFilterInputPort(int inputPort) {
         try {
+            ObjectInputStream ois = inputReadPorts.get(inputPort);
             Object readObject = ois.readObject();
             if (readObject instanceof Frame) {
                 return (Frame) readObject;
@@ -84,13 +80,7 @@ public class FilterFramework extends Thread {
         } // try-catch
     } // ReadFilterPort
 
-    private void setNextCurrentInputPort() {
-        curr_i++;
-        if (curr_i == getInputSize())
-            curr_i = 0;
-    }
-
-    private int getInputSize() {
+    int getInputSize() {
         return inputPipedReadPorts.size();
     }
 

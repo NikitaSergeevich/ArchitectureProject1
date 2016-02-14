@@ -15,9 +15,9 @@ public class Plumber {
 
         SourceFilter sourceSubSetA = new SourceFilter("SubSetA.dat");
         SourceFilter sourceSubSetB = new SourceFilter("SubSetB.dat");
-        SinkFilter sinkOutputC = new SinkFilter("OutputC.txt");
-        SinkFilter sinkWildPoints = new SinkFilter("PressureWildPoints.txt");
-        SinkFilter sinkAltitude = new SinkFilter("LessThan10K.txt");
+        SinkFilter sinkOutputC = new SinkFilter("OutputC.dat");
+        SinkFilter sinkWildPoints = new SinkFilter("PressureWildPoints.dat");
+        SinkFilter sinkAltitude = new SinkFilter("LessThan10K.dat");
 
         ColumnRemover columnRemover = new ColumnRemover(getColumnsToShowInOutputFile());
         ColumnRemover columnRemoverWildPoints = new ColumnRemover(getColumnsToShowInWildPointFile());
@@ -78,6 +78,7 @@ public class Plumber {
         Thread.sleep(90);
         filterLessThan10kSystemA.start();
         filterLessThan10kSystemB.start();
+        Thread.sleep(90);
         filterMoreThan10kSystemA.start();
         filterMoreThan10kSystemB.start();
         Thread.sleep(90);

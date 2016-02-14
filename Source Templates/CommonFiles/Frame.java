@@ -50,4 +50,6 @@ public class Frame implements Serializable {
     public void setTime(long time) {
         this.time = time;
     }
+
+    public boolean isEndFrame() {return false;}
 }

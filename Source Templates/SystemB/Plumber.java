@@ -14,8 +14,8 @@ public class Plumber {
          ****************************************************************************/
 
         SourceFilter sourceSubSetA = new SourceFilter("FlightData.dat");
-        SinkFilter sinkOutputB = new SinkFilter("OutputB.txt");
-        SinkFilter sinkWildPoints = new SinkFilter("WildPoints.txt");
+        SinkFilter sinkOutputB = new SinkFilter("OutputB.dat");
+        SinkFilter sinkWildPoints = new SinkFilter("WildPoints.dat");
 
         ColumnRemover columnRemover = new ColumnRemover(getColumnsToShowInOutputFile());
         ColumnRemover columnRemoverWildPoints = new ColumnRemover(getColumnsToShowInWildPointFile());

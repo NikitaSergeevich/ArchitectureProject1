@@ -66,14 +66,18 @@ public class SinkFilter extends FilterFramework {
 
                 Frame frame = readNextFilterInputPort();
                 if (frame != null) {
-
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(String.format("id: %s , value: %s", 0, new Date(frame.getTime())));
-                    for (Integer key : frame.getKeySet()) {
-                        sb.append(String.format("id: %s , value: %s", key, frame.get(key)));
+                    if (frame.isEndFrame()) {
+                        System.out.println("All values are processed");
+                        System.exit(0);
+                    } else {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(String.format("id: %s , value: %s", 0, new Date(frame.getTime())));
+                        for (Integer key : frame.getKeySet()) {
+                            sb.append(String.format("id: %s , value: %s", key, frame.get(key)));
+                        }
+                        sb.append("\n");
+                        out.write(sb.toString().getBytes());
                     }
-                    sb.append("\n");
-                    out.write(sb.toString().getBytes());
 
                 }
             } catch (IOException e) {

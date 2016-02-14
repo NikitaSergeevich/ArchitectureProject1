@@ -10,7 +10,6 @@ public class FilterByRowsWildPoints extends FilterFramework {
                     writeNextFilterOutputPort(frame);
                 }
             }
-        } // while
-    } // run
-
-} // FilterTemplate
+        }
+    }
+}

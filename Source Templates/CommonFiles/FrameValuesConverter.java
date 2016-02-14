@@ -15,6 +15,7 @@ public class FrameValuesConverter extends FilterFramework {
         while (true) {
             Frame frame = readNextFilterInputPort();
             if (frame != null) {
+                if (skipEndFrame(frame)) break;
                 for (Converter converter :
                         converters) {
                     converter.convert(frame);
@@ -22,5 +23,13 @@ public class FrameValuesConverter extends FilterFramework {
                 writeNextFilterOutputPort(frame);
             }
         }
+    }
+
+    private boolean skipEndFrame(Frame frame) {
+        if (frame.isEndFrame()) {
+            writeNextFilterOutputPort(frame);
+            return true;
+        }
+        return false;
     }
 }

@@ -17,6 +17,7 @@ public class ColumnRemover extends FilterFramework {
         while (true) {
             Frame frame = readNextFilterInputPort();
             if (frame != null) {
+                if (skipEndFrame(frame)) break;
                 for (Integer key : getKeys(frame)) {
                     if (!columnsToShow.contains(key)) {
                         frame.remove(key);
@@ -31,5 +32,13 @@ public class ColumnRemover extends FilterFramework {
     private Set<Integer> getKeys(Frame frame) {
         //New Set is created to avoit ConcurrentModificationException
         return new HashSet<>(frame.getKeySet());
+    }
+
+    private boolean skipEndFrame(Frame frame) {
+        if (frame.isEndFrame()) {
+            writeNextFilterOutputPort(frame);
+            return true;
+        }
+        return false;
     }
 } // FilterTemplate

@@ -12,6 +12,7 @@ public class FilterWildPoints extends FilterFramework {
         while (true) {
             Frame frame = readNextFilterInputPort();
             if (frame != null) {
+                if (skipEndFrame(frame)) break;
                 if (isFrameValid(frame, lastKnownValid)) {
                     if (!framesToReplace.isEmpty()) {
                         for (Frame invalidFrame :
@@ -36,6 +37,14 @@ public class FilterWildPoints extends FilterFramework {
 
             }
         }
+    }
+
+    private boolean skipEndFrame(Frame frame) {
+        if (frame.isEndFrame()) {
+            writeNextFilterOutputPort(frame);
+            return true;
+        }
+        return false;
     }
 
     private boolean isFrameValid(Frame frame, Frame lastKnownValid) {
