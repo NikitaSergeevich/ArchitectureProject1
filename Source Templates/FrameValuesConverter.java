@@ -52,10 +52,9 @@ public class FrameValuesConverter extends FilterFramework {
                  * out to the output port.
                  ***************************************************************/
 
-                Object o = readNextFilterInputPort();
+                Frame frame = readNextFilterInputPort();
 
-                if (o instanceof Frame) {
-                    Frame frame = (Frame) o;
+                if (frame != null) {
                     for (Converter converter :
                             converters) {
                         converter.convert(frame);

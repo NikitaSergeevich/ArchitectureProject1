@@ -63,10 +63,9 @@ public class SinkFilter extends FilterFramework {
                  * object is an instance of Frame class. If so, 
                  **************************************************************/
 
-                Object o = readNextFilterInputPort();
+                Frame frame = readNextFilterInputPort();
 
-                if (o instanceof Frame) {
-                    Frame frame = (Frame) o;
+                if (frame != null) {
                     StringBuilder sb = new StringBuilder();
                     sb.append(String.format("id: %s , value: %s", 0, new Date(frame.getTime())));
                     for (Integer key : frame.getKeySet()) {

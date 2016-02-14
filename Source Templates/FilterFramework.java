@@ -144,7 +144,7 @@ public class FilterFramework extends Thread {
      * Exceptions: IOExecption, EndOfStreamException (rethrown)
      ****************************************************************************/
 
-    Object readNextFilterInputPort() throws EndOfStreamException {
+    Frame readNextFilterInputPort() throws EndOfStreamException {
         ObjectInputStream ois = null;
         PipedInputStream pis = null;
         try {
@@ -167,7 +167,10 @@ public class FilterFramework extends Thread {
         try {
             
             Object readObject = ois.readObject();
-            return readObject;
+            if (readObject instanceof Frame) {
+                return (Frame)readObject;
+            }
+            return null;
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " Pipe read error::" + Error);
             return null;

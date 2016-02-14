@@ -62,9 +62,10 @@ public class SourceFilter extends FilterFramework {
             }
             writeNextFilterOutputPort(frame);
             System.out.print(frame.getTime() + "\n");
+
+            System.out.print("File is read compeletely");
             while (true) {
-
-
+                sleep(100);
             }
         } catch (EOFException eoferr) {
 
@@ -95,6 +96,8 @@ public class SourceFilter extends FilterFramework {
              ***********************************************************************************/
 
             System.out.println("\n" + this.getName() + "::Problem reading input data file::" + iox);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 } // SourceFilterTemplate
