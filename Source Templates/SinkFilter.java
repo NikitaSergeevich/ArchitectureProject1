@@ -33,7 +33,6 @@ import java.util.Date;
 
 public class SinkFilter extends FilterFramework {
 
-    byte[] dataBytes = null;
     String fileName = null;
     DataOutputStream out = null;
 
@@ -64,22 +63,25 @@ public class SinkFilter extends FilterFramework {
                  **************************************************************/
 
                 Frame frame = readNextFilterInputPort();
-
                 if (frame != null) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(String.format("id: %s , value: %s", 0, new Date(frame.getTime())));
-                    for (Integer key : frame.getKeySet()) {
-                        sb.append(String.format("id: %s , value: %s", key, frame.get(key)));
+                    if (isWrite(frame)) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(String.format("id: %s , value: %s", 0, new Date(frame.getTime())));
+                        for (Integer key : frame.getKeySet()) {
+                            sb.append(String.format("id: %s , value: %s", key, frame.get(key)));
+                        }
+                        sb.append("\n");
+                        out.write(sb.toString().getBytes());
                     }
-                    sb.append("\n");
-                    out.write(sb.toString().getBytes());
                 }
-                //System.out.println("Sink received: " + dataByte);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 closePorts();
                 break;
             } // catch
         } // while
     } // run
+
+    protected boolean isWrite(Frame frame) {
+        return true;
+    }
 } // FilterTemplate
