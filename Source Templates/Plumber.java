@@ -46,15 +46,13 @@ public class Plumber {
         /****************************************************************************
          * Here we instantiate three filters.
          ****************************************************************************/
-        int[] ids1 = {Frame.ATTITUDE, Frame.VELOCITY};
-        int[] ids2 = {Frame.ATTITUDE, Frame.VELOCITY, Frame.TEMPERATURE, Frame.ALTITUDE};
 
         SourceFilter sourceSubSetA = new SourceFilter("SubSetA.dat");
         SinkFilter sinkOutputB = new SinkFilter("OutputB.txt");
         SinkFilter sinkWildPoints = new SinkFilter("WildPoints.txt");
 
-        FilterCleaner filterCleaner = new FilterCleaner(ids1);
-        FilterCleaner filterCleanerWildPoints = new FilterCleaner(ids2);
+        ColumnRemover columnRemover = new ColumnRemover(getColumnsToShowInOutputFile());
+        ColumnRemover columnRemoverWildPoints = new ColumnRemover(getColumnsToShowInWildPointFile());
 
         FrameValuesConverter converterTemperatureAndAltitude = new FrameValuesConverter(createConverters());
 
@@ -68,13 +66,13 @@ public class Plumber {
          ****************************************************************************/
 
         sinkOutputB.connect(converterTemperatureAndAltitude);
-        converterTemperatureAndAltitude.connect(filterCleaner);
-        filterCleaner.connect(wildPoints);
+        converterTemperatureAndAltitude.connect(columnRemover);
+        columnRemover.connect(wildPoints);
 
-        sinkWildPoints.connect(filterCleanerWildPoints);
-        filterCleanerWildPoints.connect(wildPoints);
+        sinkWildPoints.connect(columnRemoverWildPoints);
+        columnRemoverWildPoints.connect(wildPoints);
 
-        filterCleaner.connect(wildPoints);
+        columnRemover.connect(wildPoints);
         wildPoints.connect(sourceSubSetA);
 
         /****************************************************************************
@@ -84,9 +82,9 @@ public class Plumber {
         sourceSubSetA.start();
         Thread.sleep(90);
         wildPoints.start();
-        filterCleanerWildPoints.start();
+        columnRemoverWildPoints.start();
         Thread.sleep(90);
-        filterCleaner.start();
+        columnRemover.start();
         Thread.sleep(90);
         converterTemperatureAndAltitude.start();
         Thread.sleep(90);
@@ -95,6 +93,20 @@ public class Plumber {
         Thread.sleep(90);
 
     } // main
+
+    private static List<Integer> getColumnsToShowInWildPointFile() {
+        List<Integer> columnsToShowInOutput = new ArrayList<>();
+        columnsToShowInOutput.add(Frame.PRESSURE);
+        return columnsToShowInOutput;
+    }
+
+    private static List<Integer> getColumnsToShowInOutputFile() {
+        List<Integer> columnsToShowInOutput = new ArrayList<>();
+        columnsToShowInOutput.add(Frame.TEMPERATURE);
+        columnsToShowInOutput.add(Frame.ALTITUDE);
+        columnsToShowInOutput.add(Frame.PRESSURE);
+        return columnsToShowInOutput;
+    }
 
     private static List<Converter> createConverters() {
         List<Converter> converters = new ArrayList<Converter>();
