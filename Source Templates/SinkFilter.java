@@ -60,7 +60,7 @@ public class SinkFilter extends FilterFramework {
             try {
                 /*************************************************************
                  * Here we read an object from the input port. Then we check if
-                 * object is an instance of Frame class. If so, 
+                 * object is an instance of Frame class. If so,
                  **************************************************************/
 
                 Frame frame = readNextFilterInputPort();
@@ -75,16 +75,7 @@ public class SinkFilter extends FilterFramework {
                     out.write(sb.toString().getBytes());
                 }
                 //System.out.println("Sink received: " + dataByte);
-            } catch (EndOfStreamException e) {
-
-                /***************************************************************
-                 * When we reach the end of the input stream, an exception is thrown which is shown
-                 * below. At this point, you should finish up any processing, close your ports and exit.
-                 ***************************************************************/
-
-                closePorts();
-                break;
-            } // catch
+            }
             catch (IOException e) {
                 closePorts();
                 break;

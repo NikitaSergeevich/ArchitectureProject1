@@ -33,64 +33,56 @@ public class FilterWildPoints extends FilterFramework {
 
     public void run() {
         try {
-        	
-        	Frame f1 = null;
-        	Frame f2 = null;
-        	Frame f3 = null;
-        	
-        	double p1 = 0.0;
-        	double p2 = 0.0;
-        	double p3 = 0.0;
-        	
-        	Object o = new Object();
-        	while (!(o instanceof Frame)){
-        		o = readNextFilterInputPort();
-        		}        	
-        	f1 = (Frame) o;
-        	
-        	 while (true) {
-        		 o = readNextFilterInputPort();
-       			 if (o instanceof Frame) {
-    				 f2 = (Frame) o;    				 
-    				 p1 = f1.get(Frame.PRESSURE);
-    				 p2 = f2.get(Frame.PRESSURE);
-    				 
-    				 if (Math.abs(p2 - p1) > 10) {
-    					 
-    					 while (!(o instanceof Frame)){
-    						 o = readNextFilterInputPort();
-    						 }
-    					 f3 = (Frame) o;
-    					 p3 = f3.get(Frame.PRESSURE);    					 
-    					 p2 = (p3 + p1) / 2;
-    					 f2.put(Frame.PRESSURE, p2);
-    					 System.out.print("Extrapolated:" + p2);
-        				 writeNextFilterOutputPort(f1);
-        				 writeNextFilterOutputPort(f2);
-        				 f1 = f3;
-        				 f2 = null;
-        				 f3 = null;
-    				 }
-    				 else {
-        				 writeNextFilterOutputPort(f1);
-        				 f1 = f2;
-        				 f2 = null;
-    				 }
-    				 
-       			 }
-       			 
-        	 }
-        	 
-        }  catch (EndOfStreamException e) {
 
-            /***************************************************************
-             * When we reach the end of the input stream, an exception is thrown which is shown
-             * below. At this point, you should finish up any processing, close your ports and exit.
-             ***************************************************************/
-            closePorts();
-        } // while 
+            Frame f1 = null;
+            Frame f2 = null;
+            Frame f3 = null;
+
+            double p1 = 0.0;
+            double p2 = 0.0;
+            double p3 = 0.0;
+
+            Object o = new Object();
+            while (!(o instanceof Frame)) {
+                o = readNextFilterInputPort();
+            }
+            f1 = (Frame) o;
+
+            while (true) {
+                o = readNextFilterInputPort();
+                if (o instanceof Frame) {
+                    f2 = (Frame) o;
+                    p1 = f1.get(Frame.PRESSURE);
+                    p2 = f2.get(Frame.PRESSURE);
+
+                    if (Math.abs(p2 - p1) > 10) {
+
+                        while (!(o instanceof Frame)) {
+                            o = readNextFilterInputPort();
+                        }
+                        f3 = (Frame) o;
+                        p3 = f3.get(Frame.PRESSURE);
+                        p2 = (p3 + p1) / 2;
+                        f2.put(Frame.PRESSURE, p2);
+                        System.out.print("Extrapolated:" + p2);
+                        writeNextFilterOutputPort(f1);
+                        writeNextFilterOutputPort(f2);
+                        f1 = f3;
+                        f2 = null;
+                        f3 = null;
+                    } else {
+                        writeNextFilterOutputPort(f1);
+                        f1 = f2;
+                        f2 = null;
+                    }
+
+                }
+
+            }
+
+        } // while
         catch (Exception e) {
-        	closePorts();
+            closePorts();
         }
 
     } // run

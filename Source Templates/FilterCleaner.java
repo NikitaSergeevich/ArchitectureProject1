@@ -34,21 +34,17 @@ public class FilterCleaner extends FilterFramework {
 
     public void run() {
         while (true) {
-            try {
-                Frame frame = readNextFilterInputPort();
-                if (frame != null) {
+            Frame frame = readNextFilterInputPort();
+            if (frame != null) {
 
-                    for (int i : id_filter) {
-                        if (frame.get(i) != null) {
-                            frame.remove(i);
-                        }
+                for (int i : id_filter) {
+                    if (frame.get(i) != null) {
+                        frame.remove(i);
                     }
-                    writeNextFilterOutputPort(frame);
                 }
-            } catch (EndOfStreamException e) {
-                closePorts();
-                break;
+                writeNextFilterOutputPort(frame);
             }
+
         } // while
     } // run
 } // FilterTemplate

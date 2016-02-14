@@ -144,7 +144,7 @@ public class FilterFramework extends Thread {
      * Exceptions: IOExecption, EndOfStreamException (rethrown)
      ****************************************************************************/
 
-    Frame readNextFilterInputPort() throws EndOfStreamException {
+    Frame readNextFilterInputPort() {
         ObjectInputStream ois = null;
         PipedInputStream pis = null;
         try {
@@ -153,8 +153,6 @@ public class FilterFramework extends Thread {
                 throw new EndOfStreamException("End of input stream reached");
             } //if
             setNextCurrentInputPort();
-        } catch (EndOfStreamException e) {
-            throw e;
         } catch (Exception e) {
             System.out.println("\n" + this.getName() + " Error in read port wait loop::" + e);
         } // try-catch
