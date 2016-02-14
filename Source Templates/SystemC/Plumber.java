@@ -1,3 +1,7 @@
+package SystemC;
+
+import CommonFiles.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +14,10 @@ public class Plumber {
          ****************************************************************************/
 
         SourceFilter sourceSubSetA = new SourceFilter("SubSetA.dat");
-        SinkFilter sinkOutputB = new SinkFilter("OutputB.txt");
+        SourceFilter sourceSubSetB = new SourceFilter("SubSetB.dat");
+        SinkFilter sinkOutputB = new SinkFilter("OutputC.txt");
         SinkFilter sinkWildPoints = new SinkFilter("WildPoints.txt");
+        SinkFilter sinkAltitude = new SinkFilter("Altitude.txt");
 
         ColumnRemover columnRemover = new ColumnRemover(getColumnsToShowInOutputFile());
         ColumnRemover columnRemoverWildPoints = new ColumnRemover(getColumnsToShowInWildPointFile());

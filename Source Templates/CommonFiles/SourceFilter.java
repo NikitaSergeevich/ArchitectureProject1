@@ -1,9 +1,11 @@
+package CommonFiles;
+
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
 /******************************************************************************************************************
- * File: SourceFilter.java
+ * File: CommonFiles.SourceFilter.java
  * Course: MSIT-SE
  * Project: Assignment 1
  * Copyright: Copyright (c) 2016 Innopolis University
@@ -11,7 +13,7 @@ import java.io.IOException;
  * <p>
  * Description:
  * This class serves as a template for creating source filters. The details of threading,
- * connections writing output are contained in the FilterFramework super class. In order to use this
+ * connections writing output are contained in the CommonFiles.FilterFramework super class. In order to use this
  * template the program should rename the class. The template includes the run() method which is
  * executed when the filter is started. The run() method is the guts of the filter and is where the
  * programmer should put their filter specific code.The run() method is the main read-write loop for

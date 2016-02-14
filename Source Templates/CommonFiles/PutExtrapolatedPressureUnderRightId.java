@@ -1,18 +1,17 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+package CommonFiles;
 
-public class FilterByRowsWildPoints extends FilterFramework {
+public class PutExtrapolatedPressureUnderRightId extends FilterFramework {
 
     public void run() {
         while (true) {
             Frame frame = readNextFilterInputPort();
             if (frame != null) {
                 if (frame.get(Frame.EXTRAPOLATED_PRESSURE) != null) {
-                    writeNextFilterOutputPort(frame);
+                    frame.put(Frame.PRESSURE, frame.get(Frame.EXTRAPOLATED_PRESSURE));
                 }
+                writeNextFilterOutputPort(frame);
             }
+
         } // while
     } // run
 

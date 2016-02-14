@@ -1,3 +1,5 @@
+package CommonFiles;
+
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.util.Date;
  * <p>
  * Description:
  * This class serves as a template for creating sink filters. The details of threading, connections
- * writing output are contained in the FilterFramework super class. In order to use this template
+ * writing output are contained in the CommonFiles.FilterFramework super class. In order to use this template
  * the program should rename the class. The template includes the run() method which is executed
  * when the filter is started. The run() method is the guts of the filter and is where the
  * programmer should put their filter specific code. In the template there is a main read-write loop
@@ -59,7 +61,7 @@ public class SinkFilter extends FilterFramework {
             try {
                 /*************************************************************
                  * Here we read an object from the input port. Then we check if
-                 * object is an instance of Frame class. If so,
+                 * object is an instance of CommonFiles.Frame class. If so,
                  **************************************************************/
 
                 Frame frame = readNextFilterInputPort();

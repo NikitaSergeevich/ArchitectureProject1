@@ -1,3 +1,5 @@
+package CommonFiles;
+
 /**
  * Created by Пользователь on 13.02.2016.
  */
