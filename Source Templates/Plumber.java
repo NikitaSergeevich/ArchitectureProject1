@@ -47,17 +47,18 @@ public class Plumber {
         /****************************************************************************
          * Here we instantiate three filters.
          ****************************************************************************/
-    	int[] ids1 = {Frame.ATTITUDE, Frame.VELOCITY, Frame.TEMPERATURE, Frame.ALTITUDE};
-    	int[] ids2 = {Frame.ATTITUDE, Frame.VELOCITY};		
+    	int[] ids1 = {Frame.ATTITUDE, Frame.VELOCITY};
+		int[] ids2 = {Frame.ATTITUDE, Frame.VELOCITY, Frame.TEMPERATURE, Frame.ALTITUDE};
         SourceFilter src = new SourceFilter("SubSetA.dat");
         SinkFilter out1 = new SinkFilter("OutputB.txt");
         SinkFilter out2 = new SinkFilter("WildPoints.txt");
         FilterCleaner fl1 = new FilterCleaner(ids1);
-        FilterCleaner fl2 = new FilterCleaner(ids2);	    
+        FilterCleaner fl2 = new FilterCleaner(ids1);	    
         List<Converter> converters = new ArrayList<Converter>();
         converters.add(new TemperatureConv());
         converters.add(new AltitudeConv());
-		FrameValuesConverter fvc1 = new FrameValuesConverter(converters );
+		FrameValuesConverter fvc1 = new FrameValuesConverter(converters);
+		FrameValuesConverter fvc2 = new FrameValuesConverter(converters);
 		FilterWildPoints fwp = new FilterWildPoints();        
 
         /****************************************************************************
