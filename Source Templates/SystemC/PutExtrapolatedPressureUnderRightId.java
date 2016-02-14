@@ -1,24 +1,18 @@
-package CommonFiles;
-
-public class FilterByRowsWildPoints extends FilterFramework {
-
-    public FilterByRowsWildPoints() {
-        setName("FilterByRowsWildPoints");
-    }
+public class PutExtrapolatedPressureUnderRightId extends FilterFramework {
 
     public void run() {
         while (true) {
             Frame frame = readNextFilterInputPort();
             if (frame != null) {
-                if (skipEndFrame(frame)) continue;
+                if (skipEndFrame(frame)) break;
                 if (frame.get(Frame.EXTRAPOLATED_PRESSURE) != null) {
-                    writeNextFilterOutputPort(frame);
-                } else {
-                    writeNextFilterOutputPort(null);
+                    frame.put(Frame.PRESSURE, frame.get(Frame.EXTRAPOLATED_PRESSURE));
                 }
+                writeNextFilterOutputPort(frame);
             }
-        }
-    }
+
+        } // while
+    } // run
 
     private boolean skipEndFrame(Frame frame) {
         if (frame.isEndFrame()) {
@@ -27,4 +21,4 @@ public class FilterByRowsWildPoints extends FilterFramework {
         }
         return false;
     }
-}
+} // FilterTemplate

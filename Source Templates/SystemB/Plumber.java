@@ -1,7 +1,3 @@
-package SystemB;
-
-import CommonFiles.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,11 +5,14 @@ public class Plumber {
 
     public static void main(String argv[]) throws InterruptedException {
 
+        //Source file
+        String sourceFile = argv[0];
+
         /****************************************************************************
          * Here we instantiate three filters.
          ****************************************************************************/
 
-        SourceFilter sourceSubSetA = new SourceFilter("FlightData.dat");
+        SourceFilter sourceSubSetA = new SourceFilter(sourceFile);
         SinkFilter sinkOutputB = new SinkFilter("OutputB.dat");
         SinkFilter sinkWildPoints = new SinkFilter("WildPoints.dat");
 

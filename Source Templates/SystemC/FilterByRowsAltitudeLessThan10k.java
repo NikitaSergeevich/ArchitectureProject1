@@ -1,13 +1,11 @@
-package CommonFiles;
-
-public class FilterByRowsAltitudeMoreThan10k extends FilterFramework {
+public class FilterByRowsAltitudeLessThan10k extends FilterFramework {
 
     public void run() {
         while (true) {
             Frame frame = readNextFilterInputPort();
             if (frame != null) {
                 if (skipEndFrame(frame)) continue;
-                if (frame.get(Frame.ALTITUDE) >= 10000) {
+                if (frame.get(Frame.ALTITUDE) < 10000) {
                     writeNextFilterOutputPort(frame);
                 }
             }

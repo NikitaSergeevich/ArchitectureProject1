@@ -1,16 +1,16 @@
-package CommonFiles;
-
-public class FilterByRowsAltitudeLessThan10k extends FilterFramework {
+public class PutExtrapolatedPressureUnderRightId extends FilterFramework {
 
     public void run() {
         while (true) {
             Frame frame = readNextFilterInputPort();
             if (frame != null) {
-                if (skipEndFrame(frame)) continue;
-                if (frame.get(Frame.ALTITUDE) < 10000) {
-                    writeNextFilterOutputPort(frame);
+                if (skipEndFrame(frame)) break;
+                if (frame.get(Frame.EXTRAPOLATED_PRESSURE) != null) {
+                    frame.put(Frame.PRESSURE, frame.get(Frame.EXTRAPOLATED_PRESSURE));
                 }
+                writeNextFilterOutputPort(frame);
             }
+
         } // while
     } // run
 

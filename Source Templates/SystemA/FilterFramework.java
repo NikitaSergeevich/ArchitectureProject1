@@ -1,6 +1,3 @@
-package CommonFiles;
-
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +18,7 @@ public class FilterFramework extends Thread {
      * connections are through the input port of each filter. That is each filter's
      * input port is connected to another filter's output port through this method.
      * <p>
-     * Arguments: CommonFiles.FilterFramework - this is the filter that this filter will connect to.
+     * Arguments: FilterFramework - this is the filter that this filter will connect to.
      * <p>
      * Returns: void
      * <p>
@@ -40,7 +37,7 @@ public class FilterFramework extends Thread {
             inputReadPorts.add(objectInputStream);
             filter.addOutputStream(pos, objectOutputStream);
         } catch (Exception Error) {
-            System.out.println("\n" + this.getName() + " CommonFiles.FilterFramework error connecting::" + Error);
+            System.out.println("\n" + this.getName() + " FilterFramework error connecting::" + Error);
         } // try-catch
     } // connect
 
@@ -62,11 +59,11 @@ public class FilterFramework extends Thread {
      * Exceptions: IOExecption, EndOfStreamException (rethrown)
      ****************************************************************************/
 
-    Frame readNextFilterInputPort () {
+    public Frame readNextFilterInputPort () {
         return readNextFilterInputPort(0);
     }
 
-    Frame readNextFilterInputPort(int inputPort) {
+    public Frame readNextFilterInputPort(int inputPort) {
         try {
             ObjectInputStream ois = inputReadPorts.get(inputPort);
             Object readObject = ois.readObject();
@@ -98,7 +95,7 @@ public class FilterFramework extends Thread {
      * Exceptions: IOException
      ****************************************************************************/
 
-    void writeNextFilterOutputPort(Frame frame) {
+    public void writeNextFilterOutputPort(Frame frame) {
         try {
             for (ObjectOutputStream osr : outputWritePorts) {
                 osr.writeObject(frame);
@@ -155,4 +152,4 @@ public class FilterFramework extends Thread {
         // see the example applications provided for more details.
     } // run
 
-} // CommonFiles.FilterFramework
+} // FilterFramework
