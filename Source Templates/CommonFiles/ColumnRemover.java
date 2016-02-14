@@ -24,6 +24,8 @@ public class ColumnRemover extends FilterFramework {
                     }
                 }
                 writeNextFilterOutputPort(frame);
+            } else {
+                writeNextFilterOutputPort(null);
             }
 
         } // while

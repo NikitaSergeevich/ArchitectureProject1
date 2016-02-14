@@ -38,9 +38,9 @@ public class SinkFilter extends FilterFramework {
     String fileName = null;
     DataOutputStream out = null;
 
-    public SinkFilter(String _fileName) {
-
-        fileName = _fileName;
+    public SinkFilter(String fileName) {
+        this.fileName = fileName;
+        setName("Sink:" + fileName);
     }
 
     public void run() {

@@ -58,8 +58,8 @@ public class Plumber {
         mergerMoreThan10k.connect(filterMoreThan10kSystemA);
         mergerMoreThan10k.connect(filterMoreThan10kSystemB);
 
-        filterMoreThan10kSystemB.connect(sourceSubSetB);
         filterMoreThan10kSystemA.connect(sourceSubSetA);
+        filterMoreThan10kSystemB.connect(sourceSubSetB);
 
         //Altitude less than 10K
         sinkAltitude.connect(mergerLessThan10k);
@@ -80,7 +80,6 @@ public class Plumber {
         filterLessThan10kSystemA.start();
         filterLessThan10kSystemB.start();
 
-        Thread.sleep(190);
         filterMoreThan10kSystemA.start();
         filterMoreThan10kSystemB.start();
 

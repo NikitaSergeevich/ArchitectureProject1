@@ -20,7 +20,9 @@ public class SourceFilter extends FilterFramework {
     };
 
     public SourceFilter(String fileName) {
+
         this.fileName = fileName;
+        setName("Source:" + fileName);
     }
 
     public void run() {
@@ -51,7 +53,7 @@ public class SourceFilter extends FilterFramework {
             System.out.println("\n" + this.getName() + "::Problem reading input data file::" + iox);
         }
         writeNextFilterOutputPort(END_FRAME);
-        System.out.print("\n \n File is read completely");
+        System.out.println("\n \n File is read completely");
         while (true) {
             try {
                 sleep(100);
