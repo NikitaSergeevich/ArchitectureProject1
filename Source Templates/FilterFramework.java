@@ -44,9 +44,11 @@ public class FilterFramework extends Thread {
     // Define filter input and output ports
     private List<ObjectInputStream> inputReadPorts = new ArrayList<ObjectInputStream>();
     private List<ObjectOutputStream> outputWritePorts = new ArrayList<ObjectOutputStream>();
+    private List<ObjectOutputStream> outputWriteRegPorts = new ArrayList<ObjectOutputStream>();
 
     private List<PipedInputStream> inputPipedReadPorts = new ArrayList<PipedInputStream>();
     private List<PipedOutputStream> outputPipedWritePorts = new ArrayList<PipedOutputStream>();
+    private List<PipedOutputStream> outputPipedWriteRegPorts = new ArrayList<PipedOutputStream>();
 
     // The following reference to a filter is used because java pipes are able to reliably
     // detect broken pipes on the input port of the filter. This variable will point to
@@ -98,7 +100,7 @@ public class FilterFramework extends Thread {
      * Exceptions: IOException
      ****************************************************************************/
 
-    void connect(FilterFramework filter) {
+    void connect(FilterFramework filter, boolean reg) {
         try {
             // Connect this filter's input to the upstream pipe's output stream
             PipedInputStream pis = new PipedInputStream();
@@ -109,15 +111,24 @@ public class FilterFramework extends Thread {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(pos);
             ObjectInputStream objectInputStream = new ObjectInputStream(pis);
             inputReadPorts.add(objectInputStream);
-            filter.addOutputStream(pos, objectOutputStream);
+            filter.addOutputStream(pos, objectOutputStream, reg);
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " FilterFramework error connecting::" + Error);
         } // try-catch
     } // connect
 
-    void addOutputStream(PipedOutputStream pos, ObjectOutputStream objectOutputStream) throws IOException {
-        outputPipedWritePorts.add(pos);
-        outputWritePorts.add(objectOutputStream);
+    void addOutputStream(PipedOutputStream pos, ObjectOutputStream objectOutputStream, boolean reg) throws IOException {
+
+        if (reg)
+        {
+        	outputPipedWriteRegPorts.add(pos);
+        	outputWriteRegPorts.add(objectOutputStream);
+        }
+        else
+        {
+            outputPipedWritePorts.add(pos);
+            outputWritePorts.add(objectOutputStream);            
+        }
     }
 
     /***************************************************************************
@@ -154,10 +165,8 @@ public class FilterFramework extends Thread {
          ***********************************************************************/
 
         try {
-            System.out.print("Object is going to be read \n");
+            
             Object readObject = ois.readObject();
-            System.out.print("Object is read \n");
-
             return readObject;
         } catch (Exception Error) {
             System.out.println("\n" + this.getName() + " Pipe read error::" + Error);
@@ -192,12 +201,14 @@ public class FilterFramework extends Thread {
     void writeNextFilterOutputPort(Object object) {
         try {
             ObjectOutputStream os = outputWritePorts.get(curr_o);
-            PipedOutputStream pos = outputPipedWritePorts.get(curr_o);
-            System.out.print("Object is going to be written \n");
             os.writeObject(object);
             os.flush();
-            pos.flush();
-            System.out.print("Object is  written \n");
+            
+            for (ObjectOutputStream osr: outputWriteRegPorts)
+            {
+            	osr.writeObject(object);
+            	osr.flush();
+            }
             sleep(100);
             setNextCurrentOutputPort();
         } catch (Exception e) {

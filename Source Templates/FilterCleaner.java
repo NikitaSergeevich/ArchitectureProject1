@@ -1,7 +1,3 @@
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.HashMap;
-
 /******************************************************************************************************************
  * File: FilterTemplate.java
  * Course: MSIT-SE-M-04
@@ -31,16 +27,21 @@ import java.util.HashMap;
 public class FilterCleaner extends FilterFramework {
 
     int[] id_filter = null;
+    static int num = 0;
+    String name = "";
 
     public FilterCleaner(int[] ids) {
         id_filter = ids;
+        name = "FilterCleaner" + num;
+        num++;
     }
 
     public void run() {
         while (true) {
             try {
-                System.out.print("Cleaner is goint to read \n");
+                System.out.print(name + "is goint to read \n");
                 Object o = readNextFilterInputPort();
+                System.out.print(name + "read an object\n");
                 System.out.print(o + "\n");
                 if (o instanceof Frame) {
                     Frame frame = (Frame) o;
@@ -50,7 +51,9 @@ public class FilterCleaner extends FilterFramework {
                             frame.remove(i);
                         }
                     }
+                    System.out.print(name + " going to write an object\n");
                     writeNextFilterOutputPort(frame);
+                    System.out.print(name + " writted an object\n");
                 }
             } catch (EndOfStreamException e) {
                 closePorts();

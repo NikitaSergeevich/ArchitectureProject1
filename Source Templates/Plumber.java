@@ -47,15 +47,18 @@ public class Plumber {
         /****************************************************************************
          * Here we instantiate three filters.
          ****************************************************************************/
-    	int[] ids = {Frame.PRESSURE, Frame.ATTITUDE, Frame.VELOCITY};
-        SourceFilter src = new SourceFilter("C:\\Innopolis\\IDEA\\ArchitectureProject1\\out\\SubSetA.dat");  // This is a source filter - see SourceFilter.java
-        SinkFilter out = new SinkFilter("Output.txt");  //This is a sink filter - see SinkFilter.java
-        FilterCleaner fl = new FilterCleaner(ids); // This is a �leaner filter - see FilterCleaner.java
+    	int[] ids1 = {Frame.ATTITUDE, Frame.VELOCITY, Frame.TEMPERATURE, Frame.ALTITUDE};
+    	int[] ids2 = {Frame.ATTITUDE, Frame.VELOCITY};		
+        SourceFilter src = new SourceFilter("SubSetA.dat");
+        SinkFilter out1 = new SinkFilter("OutputB.txt");
+        SinkFilter out2 = new SinkFilter("WildPoints.txt");
+        FilterCleaner fl1 = new FilterCleaner(ids1);
+        FilterCleaner fl2 = new FilterCleaner(ids2);	    
         List<Converter> converters = new ArrayList<Converter>();
         converters.add(new TemperatureConv());
         converters.add(new AltitudeConv());
-		FrameValuesConverter fvc = new FrameValuesConverter(converters ); // This is a �leaner filter - see FilterCleaner.java
-        
+		FrameValuesConverter fvc1 = new FrameValuesConverter(converters );
+		FilterWildPoints fwp = new FilterWildPoints();        
 
         /****************************************************************************
          * Here we connect the filters starting with the sink filter (filter1) which we connect to
@@ -63,24 +66,31 @@ public class Plumber {
          * must connect filters starting with the sink filter and working your way back to the
          * source as shown here.
          ****************************************************************************/
-     
-        out.connect(fvc); // This essentially says, "connect filter3's input port to filter2's output port
-        fvc.connect(fl); // This essentially says, "connect filter3's input port to filter2's output port
-        fl.connect(src); // This essentially says, "connect filter2's input port to filter1's output port
+		 
+	    out1.connect(fl2, false);
+	    fl2.connect(src, true);
+		
+	    out2.connect(fvc1, false);
+	    fvc1.connect(fl1, false);
+	    fl1.connect(fwp, false);
+	    fwp.connect(src, false);
 
         /****************************************************************************
          * Here we start the filters up.
          ****************************************************************************/
-
-        
-        src.start();
-        Thread.sleep(190);
-        fl.start();
-        Thread.sleep(190);
-        fvc.start();
-        Thread.sleep(190);
-        out.start();
-        
-
+		 
+	    src.start();
+	    Thread.sleep(90);
+	    fwp.start();
+	    fl2.start();
+	    Thread.sleep(90);
+	    fl1.start();
+	    Thread.sleep(90);
+	    fvc1.start();
+	    Thread.sleep(90);
+	    out1.start();
+	    out2.start();
+	    Thread.sleep(90);
+		
     } // main
 } // PlumberTemplate
