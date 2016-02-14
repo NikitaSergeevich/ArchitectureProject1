@@ -11,6 +11,7 @@ public class Frame implements Serializable {
     public static int VELOCITY = 1;
     public static int ALTITUDE = 2;
     public static int PRESSURE = 3;
+    public static int EXTRAPOLATED_PRESSURE = 9;
     public static int TEMPERATURE = 4;
     public static int ATTITUDE = 5;
 
