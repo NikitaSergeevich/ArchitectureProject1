@@ -1,5 +1,4 @@
 import java.io.DataInputStream;
-import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -32,19 +31,15 @@ import java.io.IOException;
 
 public class SourceFilter extends FilterFramework {
 
-    String fileName = null; // Input data file.
-    DataInputStream in = null; // File stream reference.
-    int bytesRead = 0; // Number of bytes read from the input file.
-    int bytesWritten = 0; // Number of bytes written to the stream.
+    private String fileName; // Input data file.
 
-    public SourceFilter(String _fileName) {
-        fileName = _fileName;
+    public SourceFilter(String fileName) {
+        this.fileName = fileName;
     }
 
     public void run() {
 
-        try {
-            in = new DataInputStream(new FileInputStream(fileName));
+        try (DataInputStream in = new DataInputStream(new FileInputStream(fileName));) {
             System.out.println("\n" + this.getName() + "::Source reading file...");
 
             Frame frame = new Frame();
@@ -61,34 +56,6 @@ public class SourceFilter extends FilterFramework {
                 }
             }
             writeNextFilterOutputPort(frame);
-            System.out.print(frame.getTime() + "\n");
-
-            System.out.print("File is read compeletely");
-            while (true) {
-                sleep(100);
-            }
-        } catch (EOFException eoferr) {
-
-            /***********************************************************************************
-             * The following exception is raised when we hit the end of input file. Once we reach this
-             * point, we close the input file, close the filter ports and exit.
-             ***********************************************************************************/
-
-            System.out.println("\n" + this.getName() + "::End of file reached...");
-            try {
-                in.close();
-                closePorts();
-                System.out.println("\n" + this.getName() + "::Read file complete, bytes read::" +
-                        bytesRead + " bytes written: " + bytesWritten);
-            } catch (Exception closeerr) {
-
-                /***********************************************************************************
-                 * The following exception is raised should we have a problem closing the file.
-                 ***********************************************************************************/
-
-                System.out.println(
-                        "\n" + this.getName() + "::Problem closing input data file::" + closeerr);
-            }
         } catch (IOException iox) {
 
             /***********************************************************************************
@@ -96,8 +63,14 @@ public class SourceFilter extends FilterFramework {
              ***********************************************************************************/
 
             System.out.println("\n" + this.getName() + "::Problem reading input data file::" + iox);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        }
+        System.out.print("\n \n File is read compeletely");
+        while (true) {
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 } // SourceFilterTemplate
