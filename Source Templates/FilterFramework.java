@@ -88,7 +88,7 @@ public class FilterFramework extends Thread {
      * Exceptions: IOException
      ****************************************************************************/
 
-    void connect(FilterFramework filter, boolean reg) {
+    void connect(FilterFramework filter) {
         try {
             // Connect this filter's input to the upstream pipe's output stream
             PipedInputStream pis = new PipedInputStream();
