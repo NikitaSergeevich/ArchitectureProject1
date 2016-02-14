@@ -64,15 +64,15 @@ public class SinkFilter extends FilterFramework {
 
                 Frame frame = readNextFilterInputPort();
                 if (frame != null) {
-                    if (isWrite(frame)) {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append(String.format("id: %s , value: %s", 0, new Date(frame.getTime())));
-                        for (Integer key : frame.getKeySet()) {
-                            sb.append(String.format("id: %s , value: %s", key, frame.get(key)));
-                        }
-                        sb.append("\n");
-                        out.write(sb.toString().getBytes());
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(String.format("id: %s , value: %s", 0, new Date(frame.getTime())));
+                    for (Integer key : frame.getKeySet()) {
+                        sb.append(String.format("id: %s , value: %s", key, frame.get(key)));
                     }
+                    sb.append("\n");
+                    out.write(sb.toString().getBytes());
+
                 }
             } catch (IOException e) {
                 closePorts();
@@ -81,7 +81,4 @@ public class SinkFilter extends FilterFramework {
         } // while
     } // run
 
-    protected boolean isWrite(Frame frame) {
-        return true;
-    }
 } // FilterTemplate

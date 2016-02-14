@@ -49,31 +49,6 @@ public class FilterFramework extends Thread {
     private List<PipedOutputStream> outputPipedWritePorts = new ArrayList<PipedOutputStream>();
 
     int curr_i = 0;
-
-    /***************************************************************************
-     * InnerClass:: endOfStreamExeception
-     * <p>
-     * Purpose: This
-     * <p>
-     * Arguments: none
-     * <p>
-     * Returns: none
-     * <p>
-     * Exceptions: none
-     ****************************************************************************/
-
-    class EndOfStreamException extends Exception {
-        static final long serialVersionUID = 0; // the version for streaming
-
-        EndOfStreamException() {
-            super();
-        }
-
-        EndOfStreamException(String s) {
-            super(s);
-        }
-    } // class
-
     /***************************************************************************
      * CONCRETE METHOD:: connect
      * <p>

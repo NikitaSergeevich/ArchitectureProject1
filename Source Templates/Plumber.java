@@ -29,7 +29,7 @@ public class Plumber {
          * source as shown here.
          ****************************************************************************/
 
-        sinkOutputB.connect(converterTemperatureAndAltitude);
+        sinkOutputB.connect(sourceSubSetA);
         converterTemperatureAndAltitude.connect(columnRemover);
         columnRemover.connect(rowFilterOutputFile);
         rowFilterOutputFile.connect(wildPoints);
@@ -39,7 +39,6 @@ public class Plumber {
         columnRemoverWildPoints.connect(rowFilterWildPoints);
         rowFilterWildPoints.connect(wildPoints);
 
-        columnRemover.connect(wildPoints);
         wildPoints.connect(sourceSubSetA);
 
         /****************************************************************************
