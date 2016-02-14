@@ -56,10 +56,10 @@ public class Plumber {
         wildPoints.connect(mergerMoreThan10k);
 
         mergerMoreThan10k.connect(filterMoreThan10kSystemA);
-        filterMoreThan10kSystemA.connect(sourceSubSetA);
-
         mergerMoreThan10k.connect(filterMoreThan10kSystemB);
+
         filterMoreThan10kSystemB.connect(sourceSubSetB);
+        filterMoreThan10kSystemA.connect(sourceSubSetA);
 
         //Altitude less than 10K
         sinkAltitude.connect(mergerLessThan10k);
@@ -75,30 +75,37 @@ public class Plumber {
 
         sourceSubSetA.start();
         sourceSubSetB.start();
-        Thread.sleep(90);
+
+        Thread.sleep(190);
         filterLessThan10kSystemA.start();
         filterLessThan10kSystemB.start();
-        Thread.sleep(90);
+
+        Thread.sleep(190);
         filterMoreThan10kSystemA.start();
         filterMoreThan10kSystemB.start();
-        Thread.sleep(90);
+
+        Thread.sleep(190);
         mergerLessThan10k.start();
         mergerMoreThan10k.start();
-        Thread.sleep(90);
+
+        Thread.sleep(190);
         wildPoints.start();
-        Thread.sleep(90);
+
+        Thread.sleep(190);
         rowFilterWildPoints.start();
         rowFilterOutputFile.start();
-        Thread.sleep(90);
+
+        Thread.sleep(190);
         columnRemoverWildPoints.start();
         columnRemover.start();
-        Thread.sleep(90);
+
+        Thread.sleep(190);
         converterTemperatureAndAltitude.start();
-        Thread.sleep(90);
+
+        Thread.sleep(190);
         sinkAltitude.start();
         sinkOutputC.start();
         sinkWildPoints.start();
-        Thread.sleep(90);
 
     } // main
 

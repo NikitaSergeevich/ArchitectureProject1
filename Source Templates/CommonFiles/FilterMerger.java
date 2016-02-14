@@ -8,9 +8,28 @@ public class FilterMerger extends FilterFramework {
         Frame frameB = getFrameB();
 
         while (true) {
-
             if (frameA != null && frameB != null) {
-                if (writeAllFramesIfEndFrame(frameA, frameB)) break;
+                if (frameA.isEndFrame()) {
+                    if (!frameB.isEndFrame()) {
+                        writeNextFilterOutputPort(frameB);
+                        frameB = getFrameB();
+                        continue;
+                    }
+                }
+                if (frameB.isEndFrame()) {
+                    if (!frameA.isEndFrame()) {
+                        writeNextFilterOutputPort(frameA);
+                        frameA = getFrameA();
+                        continue;
+                    }
+                }
+
+                if (frameA.isEndFrame() && frameB.isEndFrame()) {
+                    writeNextFilterOutputPort(frameA);
+                    frameA = null;
+                    frameB = null;
+                    continue;
+                }
 
                 if (frameA.getTime() < frameB.getTime()) {
                     writeNextFilterOutputPort(frameA);
@@ -23,21 +42,6 @@ public class FilterMerger extends FilterFramework {
         }
     }
 
-    private boolean writeAllFramesIfEndFrame(Frame frameA, Frame frameB) {
-        if (frameA.isEndFrame()) {
-            if (!frameB.isEndFrame()) {
-                writeNextFilterOutputPort(frameB);
-                return true;
-            }
-        }
-        if (frameB.isEndFrame()) {
-            if (!frameA.isEndFrame()) {
-                writeNextFilterOutputPort(frameA);
-                return true;
-            }
-        }
-        return false;
-    }
 
     private Frame getFrameB() {
         return readNextFilterInputPort(1);

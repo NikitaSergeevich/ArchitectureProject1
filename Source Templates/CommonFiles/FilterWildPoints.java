@@ -12,7 +12,7 @@ public class FilterWildPoints extends FilterFramework {
         while (true) {
             Frame frame = readNextFilterInputPort();
             if (frame != null) {
-                if (skipEndFrame(frame)) break;
+                if (skipEndFrame(frame)) continue;
                 if (isFrameValid(frame, lastKnownValid)) {
                     if (!framesToReplace.isEmpty()) {
                         for (Frame invalidFrame :

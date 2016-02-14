@@ -6,7 +6,7 @@ public class FilterByRowsAltitudeLessThan10k extends FilterFramework {
         while (true) {
             Frame frame = readNextFilterInputPort();
             if (frame != null) {
-                if (skipEndFrame(frame)) break;
+                if (skipEndFrame(frame)) continue;
                 if (frame.get(Frame.ALTITUDE) < 10000) {
                     writeNextFilterOutputPort(frame);
                 }
