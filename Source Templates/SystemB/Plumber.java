@@ -13,7 +13,7 @@ public class Plumber {
          * Here we instantiate three filters.
          ****************************************************************************/
 
-        SourceFilter sourceSubSetA = new SourceFilter("SubSetA.dat");
+        SourceFilter sourceSubSetA = new SourceFilter("FlightData.dat");
         SinkFilter sinkOutputB = new SinkFilter("OutputB.txt");
         SinkFilter sinkWildPoints = new SinkFilter("WildPoints.txt");
 
@@ -33,7 +33,7 @@ public class Plumber {
          * source as shown here.
          ****************************************************************************/
 
-        sinkOutputB.connect(sourceSubSetA);
+        sinkOutputB.connect(converterTemperatureAndAltitude);
         converterTemperatureAndAltitude.connect(columnRemover);
         columnRemover.connect(rowFilterOutputFile);
         rowFilterOutputFile.connect(wildPoints);

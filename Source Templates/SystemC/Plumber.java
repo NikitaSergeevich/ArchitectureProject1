@@ -15,16 +15,25 @@ public class Plumber {
 
         SourceFilter sourceSubSetA = new SourceFilter("SubSetA.dat");
         SourceFilter sourceSubSetB = new SourceFilter("SubSetB.dat");
-        SinkFilter sinkOutputB = new SinkFilter("OutputC.txt");
-        SinkFilter sinkWildPoints = new SinkFilter("WildPoints.txt");
-        SinkFilter sinkAltitude = new SinkFilter("Altitude.txt");
+        SinkFilter sinkOutputC = new SinkFilter("OutputC.txt");
+        SinkFilter sinkWildPoints = new SinkFilter("PressureWildPoints.txt");
+        SinkFilter sinkAltitude = new SinkFilter("LessThan10K.txt");
 
         ColumnRemover columnRemover = new ColumnRemover(getColumnsToShowInOutputFile());
         ColumnRemover columnRemoverWildPoints = new ColumnRemover(getColumnsToShowInWildPointFile());
 
+        FilterByRowsAltitudeLessThan10k filterLessThan10kSystemA = new FilterByRowsAltitudeLessThan10k();
+        FilterByRowsAltitudeMoreThan10k filterMoreThan10kSystemA = new FilterByRowsAltitudeMoreThan10k();
+
+        FilterByRowsAltitudeLessThan10k filterLessThan10kSystemB = new FilterByRowsAltitudeLessThan10k();
+        FilterByRowsAltitudeMoreThan10k filterMoreThan10kSystemB = new FilterByRowsAltitudeMoreThan10k();
+
         FrameValuesConverter converterTemperatureAndAltitude = new FrameValuesConverter(createConverters());
         FilterByRowsWildPoints rowFilterWildPoints = new FilterByRowsWildPoints();
         PutExtrapolatedPressureUnderRightId rowFilterOutputFile = new PutExtrapolatedPressureUnderRightId();
+
+        FilterMerger mergerMoreThan10k = new FilterMerger();
+        FilterMerger mergerLessThan10k = new FilterMerger();
 
         FilterWildPoints wildPoints = new FilterWildPoints();
 
@@ -35,23 +44,45 @@ public class Plumber {
          * source as shown here.
          ****************************************************************************/
 
-        sinkOutputB.connect(sourceSubSetA);
+        sinkOutputC.connect(converterTemperatureAndAltitude);
         converterTemperatureAndAltitude.connect(columnRemover);
         columnRemover.connect(rowFilterOutputFile);
         rowFilterOutputFile.connect(wildPoints);
-
 
         sinkWildPoints.connect(columnRemoverWildPoints);
         columnRemoverWildPoints.connect(rowFilterWildPoints);
         rowFilterWildPoints.connect(wildPoints);
 
-        wildPoints.connect(sourceSubSetA);
+        wildPoints.connect(mergerMoreThan10k);
 
+        mergerMoreThan10k.connect(filterMoreThan10kSystemA);
+        filterMoreThan10kSystemA.connect(sourceSubSetA);
+
+        mergerMoreThan10k.connect(filterMoreThan10kSystemB);
+        filterMoreThan10kSystemB.connect(sourceSubSetB);
+
+        //Altitude less than 10K
+        sinkAltitude.connect(mergerLessThan10k);
+
+        mergerLessThan10k.connect(filterLessThan10kSystemA);
+        mergerLessThan10k.connect(filterLessThan10kSystemB);
+
+        filterLessThan10kSystemA.connect(sourceSubSetA);
+        filterLessThan10kSystemB.connect(sourceSubSetB);
         /****************************************************************************
          * Here we start the filters up.
          ****************************************************************************/
 
         sourceSubSetA.start();
+        sourceSubSetB.start();
+        Thread.sleep(90);
+        filterLessThan10kSystemA.start();
+        filterLessThan10kSystemB.start();
+        filterMoreThan10kSystemA.start();
+        filterMoreThan10kSystemB.start();
+        Thread.sleep(90);
+        mergerLessThan10k.start();
+        mergerMoreThan10k.start();
         Thread.sleep(90);
         wildPoints.start();
         Thread.sleep(90);
@@ -63,7 +94,8 @@ public class Plumber {
         Thread.sleep(90);
         converterTemperatureAndAltitude.start();
         Thread.sleep(90);
-        sinkOutputB.start();
+        sinkAltitude.start();
+        sinkOutputC.start();
         sinkWildPoints.start();
         Thread.sleep(90);
 
