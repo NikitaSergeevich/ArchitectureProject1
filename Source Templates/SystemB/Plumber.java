@@ -1,4 +1,9 @@
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Plumber {
@@ -14,7 +19,22 @@ public class Plumber {
 
         SourceFilter sourceSubSetA = new SourceFilter(sourceFile);
         SinkFilter sinkOutputB = new SinkFilter("OutputB.dat");
-        SinkFilter sinkWildPoints = new SinkFilter("WildPoints.dat");
+        SinkFilter sinkWildPoints = new SinkFilter("WildPoints.dat") {
+            @Override
+            protected String setTableHeader() {
+                return "Time: Pressure (psi): \n";
+            }
+
+            @Override
+            protected void setOutputFormat(Frame frame, StringBuilder sb) {
+                DateFormat dateFormat = new SimpleDateFormat("YYYY:MM:DD:HH:mm:ss");
+                NumberFormat pressureFormat = new DecimalFormat("#00.00000");
+                sb.append(dateFormat.format(new Date(frame.getTime())));
+                sb.append(" ");
+                sb.append(pressureFormat.format(frame.get(Frame.PRESSURE)));
+                sb.append("\n");
+            }
+        };
 
         ColumnRemover columnRemover = new ColumnRemover(getColumnsToShowInOutputFile());
         ColumnRemover columnRemoverWildPoints = new ColumnRemover(getColumnsToShowInWildPointFile());

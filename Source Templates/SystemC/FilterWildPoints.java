@@ -22,6 +22,7 @@ public class FilterWildPoints extends FilterFramework {
                                 invalidFrame.put(Frame.EXTRAPOLATED_PRESSURE,
                                         (invalidFrame.get(Frame.PRESSURE) + frame.get(Frame.PRESSURE)) / 2);
                             }
+                            invalidFrame.setInterpolated();
                             writeNextFilterOutputPort(invalidFrame);
                         }
                     }

@@ -16,6 +16,7 @@ public class Frame implements Serializable {
     public static int ATTITUDE = 5;
 
     private final Map<Integer, Double> map = new HashMap<>();
+    private boolean interpolated = false;
 
     public void put(Integer id, Double value) {
         map.put(id, value);
@@ -32,9 +33,9 @@ public class Frame implements Serializable {
     public void remove(int i) {
         map.remove(i);
     }
-    
+
     public Set<Integer> getKeySet() {
-    	return map.keySet();
+        return map.keySet();
     }
 
     public void clear() {
@@ -50,4 +51,11 @@ public class Frame implements Serializable {
     }
 
     public boolean isEndFrame() {return false;}
+
+    public boolean isInterpolated() {
+        return interpolated;
+    }
+    public void setInterpolated() {
+        interpolated = true;
+    }
 }
